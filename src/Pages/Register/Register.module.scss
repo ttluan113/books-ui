@@ -1,0 +1,154 @@
+.wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+.main {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+.inner {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 70%;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+
+    img {
+        width: 120px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 26px;
+        font-weight: 600;
+        margin: 10px 0;
+        color: #333;
+    }
+
+    p {
+        font-size: 16px;
+        color: #777;
+        line-height: 1.5;
+    }
+}
+
+.MuiTextField-root {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .MuiInputBase-root {
+        background-color: #f9f9f9;
+    }
+
+    &.Mui-focused {
+        background-color: #fff;
+        box-shadow: 0 0 0 2px #00796b;
+    }
+
+    .MuiInputLabel-root {
+        color: #555;
+    }
+
+    .MuiOutlinedInput-root {
+        &.Mui-focused fieldset {
+            border-color: #00796b;
+        }
+    }
+}
+
+.MuiButton-root {
+    background-color: #00796b;
+    color: #fff;
+    font-weight: 600;
+    text-transform: none;
+    &:hover {
+        background-color: #004d40;
+        box-shadow: 0 4px 8px rgba(0, 121, 107, 0.2);
+    }
+    &:disabled {
+        background-color: #cccccc;
+        color: #666666;
+    }
+}
+
+.MuiIconButton-root {
+    color: #00796b;
+    &:hover {
+        background-color: rgba(0, 121, 107, 0.1);
+    }
+}
+
+.MuiInputAdornment-root {
+    .MuiIconButton-root {
+        padding: 8px;
+    }
+}
+
+.MuiTextField-root input {
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+}
+
+form {
+    width: 100%;
+}
+
+.form {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    h1 {
+        text-align: center;
+        font-size: 32px;
+        font-weight: 600;
+        color: #333;
+        padding-top: 10px;
+    }
+}
+
+.MuiDivider-root {
+    margin: 20px 0;
+    color: #00796b;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .inner {
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .logo img {
+        width: 100px;
+    }
+
+    .form {
+        padding: 20px;
+    }
+}

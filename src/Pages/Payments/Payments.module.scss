@@ -1,0 +1,139 @@
+.main {
+    display: grid;
+    grid-template-columns: 70% 29%;
+    gap: 1%;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.left {
+    border-radius: 10px;
+}
+
+.list_product {
+    padding: 20px;
+    background-color: #fff;
+
+    h4 {
+        color: #38383d;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+.list_product__item {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    gap: 30px;
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        li {
+            display: flex;
+            border-radius: 10px;
+            gap: 10px;
+            list-style: none;
+            img {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+            .product__item__name {
+                color: #808089;
+            }
+
+            .product__item__div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 10px;
+                color: #808089;
+            }
+        }
+    }
+}
+
+.list_product__item__info__1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.product__item__info__2 {
+    background-color: #f3f5fa;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 10px;
+    gap: 10px;
+    color: #808089;
+    margin-top: 10px;
+}
+
+.product__item__div {
+    span {
+        color: #ff424e;
+        font-weight: 500;
+    }
+}
+
+.form__payment {
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 10px;
+    h4 {
+        color: #38383d;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+.form__payment__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form__payment__item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.form__payment__item:hover {
+    cursor: pointer;
+}
+
+.form__input {
+    background-color: #fff;
+    margin-top: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form__input__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.right {
+    background-color: #fff;
+    border-radius: 10px;
+}
