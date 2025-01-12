@@ -2,9 +2,12 @@ import { requestAuth } from '../config/config';
 import Context from './Context';
 import CryptoJS from 'crypto-js';
 
-import { useEffect, useState } from 'react';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-function Provider({ children }) {
+import { useEffect, useState, useMemo, useContext, createContext } from 'react';
+
+export function Provider({ children }) {
     const [dataUser, setDataUser] = useState({});
 
     const token = document.cookie;
@@ -26,4 +29,38 @@ function Provider({ children }) {
     return <Context.Provider value={dataUser}>{children}</Context.Provider>;
 }
 
-export default Provider;
+const ThemeContext = createContext();
+
+export const useTheme = () => useContext(ThemeContext);
+
+export function ThemeProvider({ children }) {
+    const [mode, setMode] = useState(localStorage.getItem('theme') || 'light');
+
+    const toggleTheme = () => {
+        const newMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newMode);
+        localStorage.setItem('theme', newMode); // Lưu lại trạng thái theme
+    };
+
+    const theme = useMemo(
+        () =>
+            createTheme({
+                palette: {
+                    mode,
+                    background: {
+                        default: mode === 'dark' ? '#001e3c' : '#fff',
+                    },
+                },
+            }),
+        [mode],
+    );
+
+    return (
+        <ThemeContext.Provider value={{ mode, toggleTheme }}>
+            <MuiThemeProvider theme={theme}>
+                <CssBaseline />
+                {children}
+            </MuiThemeProvider>
+        </ThemeContext.Provider>
+    );
+}

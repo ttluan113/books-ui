@@ -3,6 +3,7 @@ import styles from './HomePage.module.scss';
 
 import Slider from 'react-slick';
 import HomeCardBody from './Components/HomeCardBody/HomeCardBody';
+import { useTheme } from '../../../../store/Provider';
 
 const cx = classNames.bind(styles);
 
@@ -15,10 +16,12 @@ const settings = {
     arrows: false,
 };
 
-function HomePage() {
+function HomePage({ products }) {
+    const { mode } = useTheme();
+
     return (
         <div className={cx('wrapper')}>
-            <Slider className={cx('slider')} {...settings}>
+            <Slider className={cx(mode === 'dark' ? 'slider__dark' : 'slider')} {...settings}>
                 <div className={cx('slide')}>
                     <img
                         src="https://salt.tikicdn.com/cache/w750/ts/tikimsp/cf/29/6b/a7159437f6c399d2101af4ce07244707.png.webp"
@@ -44,8 +47,8 @@ function HomePage() {
                     />
                 </div>
             </Slider>
-            <div className={cx('home-card-body')}>
-                <HomeCardBody />
+            <div className={cx(mode === 'dark' ? 'home-card-body__dark' : 'home-card-body')}>
+                <HomeCardBody products={products} />
             </div>
         </div>
     );

@@ -1,0 +1,47 @@
+.wrapper {
+    h4 {
+        color: #fff;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.form__add-product {
+    display: grid;
+    grid-template-columns: 68% 31%;
+    gap: 1%;
+}
+
+.form__input {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: #21222d;
+    padding: 15px;
+    border-radius: 10px;
+    gap: 10px;
+    input {
+        color: #fff;
+    }
+    label {
+        color: #fff;
+    }
+}
+
+.form__slider {
+    background: #21222d;
+    padding: 30px;
+    border-radius: 10px;
+    img {
+        width: 100%;
+        object-fit: cover;
+        height: 500px;
+        border-radius: 10px;
+    }
+}
+
+.form__editor {
+    background-color: #21222d;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 10px;
+}

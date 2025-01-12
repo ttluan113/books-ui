@@ -19,35 +19,42 @@
     margin-top: 10px;
 }
 
+.cart__empty {
+    width: 100%;
+}
+
 .header-cart {
-    background-color: #fff;
+    background-color: #f5f5f5;
     display: grid;
-    grid-template-columns: auto 180px 120px 120px 20px;
+    grid-template-columns: auto 180px 120px 150px 25px;
     column-gap: 24px;
     padding: 5px;
     border-radius: 5px;
     color: #787878;
     font-size: 14px;
+    color: #000;
 }
 
 .sum-price {
-    background-color: #fff;
-    max-height: 450px;
+    background-color: #f5f5f5;
 }
 
 .cart-item__product {
     display: grid;
-    grid-template-columns: auto 180px 120px 120px 20px;
+    grid-template-columns: auto 180px 120px 150px 20px;
     padding: 10px;
     column-gap: 24px;
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #f5f5f5;
     margin-bottom: 10px;
     align-items: center;
     margin-top: 15px;
     img {
         width: 80px;
         height: 80px;
+    }
+    h4 {
+        padding-left: 10px;
     }
 }
 
@@ -65,27 +72,10 @@
 }
 
 .cart-item__product-size {
-    display: flex;
-    height: 40px;
-    button {
-        width: 25px;
-        height: 25px;
-        border: none;
-        border-radius: 4px;
-        background: none;
-        border: 1px solid #ccc;
-    }
-    input {
-        width: 25px;
-        height: 25px;
-        text-align: center;
-        outline: none;
-        border: 1px solid #ccc;
-    }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    span {
+        color: #ff424e;
+        font-weight: 600;
+        font-size: 13px;
     }
 }
 
@@ -188,6 +178,28 @@
     padding: 10px;
     h4 {
         font-size: 20px;
+        font-weight: 500;
+        margin: 0px;
+        color: #000;
+        line-height: 28px;
+        text-transform: uppercase;
+    }
+}
+
+.cart-empty {
+    width: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    img {
+        width: 200px;
+    }
+    h4 {
+        font-size: 17px;
         font-weight: 500;
         margin: 0px;
         color: #000;

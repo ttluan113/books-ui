@@ -1,0 +1,14 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 15% 84%;
+    background-color: #171821;
+}
+
+.slide-bar {
+    border-right: 1px solid #2d2d2d;
+}
+
+.home-page {
+    padding: 10px;
+    min-height: 100vh;
+}

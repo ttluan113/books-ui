@@ -3,6 +3,7 @@
     background-color: #fff;
     border-radius: 10px;
     margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .slide {
@@ -10,9 +11,33 @@
     height: 50%;
     position: sticky;
     img {
-        width: 100%;
-        height: 100%;
+        width: 50%;
+        height: 50%;
         object-fit: cover;
         border-radius: 10px;
     }
+}
+
+.slider__dark {
+    padding: 10px;
+    background-color: #071b2f;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.home-card-body {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.home-card-body__dark {
+    padding: 10px;
+    background-color: #071b2f;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }

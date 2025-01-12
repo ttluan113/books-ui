@@ -30,6 +30,7 @@
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
+        color: #27272a;
     }
     .price {
         font-size: 17px;
@@ -52,4 +53,20 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.wrapper__dark {
+    width: 100%;
+    background-color: #0c2843;
+    padding: 10px;
+    border-radius: 10px;
+    img {
+        width: 100%;
+        border-radius: 10px;
+    }
+    .content {
+        h3 {
+            color: #fff;
+        }
+    }
 }

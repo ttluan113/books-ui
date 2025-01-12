@@ -9,11 +9,14 @@ import logo from '../../../public/images/logo.webp';
 import { Link as LinkRouter, useNavigate } from 'react-router-dom';
 import { requestRegister } from '../../config/config';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTheme } from '../../store/Provider';
 
 const cx = classNames.bind(styles);
 function RegisterUser() {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const { mode } = useTheme();
 
     const handleGoogleLogin = () => {
         // Xử lý logic đăng nhập bằng Google ở đây
@@ -46,12 +49,12 @@ function RegisterUser() {
     };
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx(mode === 'dark' ? 'wrapper__dark' : 'wrapper')}>
             <header>
                 <Header />
             </header>
             <main className={cx('main')}>
-                <div className={cx('inner')}>
+                <div className={cx(mode === 'dark' ? 'inner__dark' : 'inner')}>
                     <div className={cx('logo')}>
                         <img src={logo} alt="" />
                         <h2>L2 Team</h2>

@@ -1,6 +1,8 @@
 import App from '../App';
+import Dashboard from '../Pages/Admin/Dashboard';
 import Cart from '../Pages/Cart/Cart';
 import DetailProduct from '../Pages/DetailProduct/DetailProduct';
+import InfoUser from '../Pages/InfoUser/InfoUser';
 import LoginUser from '../Pages/Login/Login';
 import Payments from '../Pages/Payments/Payments';
 import RegisterUser from '../Pages/Register/Register';
@@ -29,6 +31,14 @@ const publicRoutes = [
     {
         path: '/payments',
         component: <Payments />,
+    },
+    {
+        path: '/customer',
+        component: <InfoUser />,
+    },
+    {
+        path: '/admin',
+        component: <Dashboard />,
     },
 ];
 
