@@ -5,6 +5,8 @@ const request = axios.create({
     withCredentials: true,
 });
 
+/// user
+
 export const requestRegister = async (data) => {
     const res = await request.post('/api/register', data);
     return res.data;
@@ -22,6 +24,11 @@ export const requestLogout = async () => {
 
 export const requestLogin = async (data) => {
     const res = await request.post('/api/login', data);
+    return res.data;
+};
+
+export const requestSearchAddress = async (address) => {
+    const res = await request.get('/api/search-address', { params: { address } });
     return res.data;
 };
 
@@ -61,5 +68,28 @@ export const requestDeleteProductCart = async (id) => {
 
 export const requestDeleteCart = async () => {
     const res = await request.delete('/api/delete-cart');
+    return res.data;
+};
+
+/// discount
+export const requestAddDiscount = async (data) => {
+    const res = await request.post('/api/add-discount', data);
+    return res.data;
+};
+
+export const requestAddUserDiscount = async (idDiscount) => {
+    const res = await request.post('/api/add-user-discount', { idDiscount });
+    return res.data;
+};
+
+/// payments
+
+export const requestPayment = async (data) => {
+    const res = await request.post('/api/payment', data);
+    return res.data;
+};
+
+export const requestCheckout = async (id) => {
+    const res = await request.get('/api/checkout', { params: { idOrder: id } });
     return res.data;
 };

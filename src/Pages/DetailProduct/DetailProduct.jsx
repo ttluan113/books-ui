@@ -168,7 +168,7 @@ function DetailProduct() {
 
                             <div className={cx('detail-item')}>
                                 <span>Số trang</span>
-                                <p>{product?.options?.page}</p>
+                                <p>{product?.options?.page} trang</p>
                             </div>
 
                             <div className={cx('detail-item')}>

@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Dashboard.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SlideBar from './SlideBar/SlideBar';
 import HomePage from './HomePage/HomePage';
 
@@ -11,13 +11,15 @@ function Dashboard() {
         document.title = 'Admin | L2 Team';
     }, []);
 
+    const [type, setType] = useState(0);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('slide-bar')}>
-                <SlideBar />
+                <SlideBar type={type} setType={setType} />
             </div>
             <div className={cx('home-page')}>
-                <HomePage />
+                <HomePage type={type} />
             </div>
         </div>
     );

@@ -2,83 +2,106 @@ import className from 'classnames/bind';
 import styles from './Cart.module.scss';
 
 import Header from '../../Components/Header/Header';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-import CardBody from '../../Components/CardBody/CardBody';
-import Slider from 'react-slick';
-import { requestDeleteCart, requestDeleteProductCart, requestGetCarts } from '../../config/config';
+import {
+    requestAddUserDiscount,
+    requestDeleteCart,
+    requestDeleteProductCart,
+    requestGetCarts,
+} from '../../config/config';
 import cartEmpty from '../../../public/images/cartEmpty.png';
+import { useTheme } from '../../store/Provider';
+import imgDiscount from '/public/images/coupon.png';
+import { Button } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import { useStore } from '../../hooks/useStore';
+import { Link } from 'react-router-dom';
 
 const cx = className.bind(styles);
 
 function Cart() {
     const [carts, setCarts] = useState([]);
-    const [sumPrice, setSumPrice] = useState(0);
+    const [dataDiscount, setDataDiscount] = useState([]);
+    const [totalCart, setTotalCart] = useState(0);
+
+    const dataUser = useStore();
+    const { mode } = useTheme();
+
+    // Fetch cart data
+    const fetchData = useCallback(async () => {
+        try {
+            const res = await requestGetCarts();
+            setCarts(res.data || []);
+            setTotalCart(res.total);
+            setDataDiscount(res.discount);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
 
     useEffect(() => {
         document.title = 'L2 Team | Giỏ Hàng';
-    }, []);
+        fetchData();
+    }, [fetchData]);
 
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 6,
-        slidesToScroll: 1,
-        arrows: false,
-        autoplay: true,
-    };
+    // Computed values
+    const defaultPrice = useMemo(
+        () => carts.reduce((total, item) => total + item.price * item.quantityUserBuy, 0),
+        [carts],
+    );
 
-    const fetchData = async () => {
-        const res = await requestGetCarts();
-        setCarts(res);
-        const total = res.reduce((total, item) => total + item.price * item.quantityUserBuy, 0);
-        setSumPrice(total);
-    };
+    const totalDiscount = useMemo(() => totalCart - defaultPrice, [totalCart, defaultPrice]);
 
-    useEffect(() => {
-        try {
-            fetchData();
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
+    // Handlers
+    const handleDeleteProductCart = useCallback(
+        async (id) => {
+            try {
+                await requestDeleteProductCart(id);
+                fetchData();
+            } catch (error) {
+                toast.error(error.response.data.message);
+            }
+        },
+        [fetchData],
+    );
 
-    const totalPrice = (price, quantity) => {
-        return price * quantity;
-    };
-
-    const handleDeleteProductCart = async (id) => {
-        try {
-            await requestDeleteProductCart(id);
-            await fetchData();
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const handleDeleteCart = async () => {
+    const handleDeleteCart = useCallback(async () => {
         try {
             await requestDeleteCart();
-            await fetchData();
+            fetchData();
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message);
         }
-    };
+    }, [fetchData]);
+
+    const handleAddUserDiscount = useCallback(
+        async (idDiscount) => {
+            try {
+                const res = await requestAddUserDiscount(idDiscount);
+                fetchData();
+                toast.success(res.message);
+            } catch (error) {
+                toast.error(error.response.data.message);
+            }
+        },
+        [fetchData],
+    );
 
     return (
         <div className={cx('wrapper')}>
+            <ToastContainer />
             <header>
                 <Header />
             </header>
 
-            <main className={cx('main')}>
+            <main className={cx(mode === 'dark' ? 'main__dark' : 'main')}>
                 <h4>Giỏ Hàng</h4>
                 <div className={cx(carts.length > 0 ? 'cart' : 'cart__empty')}>
                     {carts.length > 0 ? (
                         <div>
-                            <div className={cx('header-cart')}>
+                            <div className={cx(mode === 'dark' ? 'header-cart__dark' : 'header-cart')}>
                                 <div className={cx('header-cart__product')}>({carts.length}) Sản phẩm</div>
                                 <div className={cx('header-cart__price')}>Đơn Giá</div>
                                 <div className={cx('header-cart__quantity')}>Số lượng</div>
@@ -90,7 +113,12 @@ function Cart() {
 
                             <div className={cx('cart-item')}>
                                 {carts.map((cart) => (
-                                    <div className={cx('cart-item__product')}>
+                                    <div
+                                        key={cart.id}
+                                        className={cx(
+                                            mode === 'dark' ? 'cart-item__product__dark' : 'cart-item__product',
+                                        )}
+                                    >
                                         <div className={cx('cart-item__product-img')}>
                                             <img
                                                 src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${
@@ -107,135 +135,73 @@ function Cart() {
                                             <span>x {cart.quantityUserBuy} Sản phẩm</span>
                                         </div>
                                         <div className={cx('cart-item__product-price')}>
-                                            {totalPrice(cart?.price, cart?.quantityUserBuy).toLocaleString()} đ
+                                            {(cart.price * cart.quantityUserBuy).toLocaleString()} đ
                                         </div>
                                         <div className={cx('cart-item__product-delete')}>
-                                            <DeleteOutlineIcon onClick={() => handleDeleteProductCart(cart._id)} />
+                                            <DeleteOutlineIcon onClick={() => handleDeleteProductCart(cart.id)} />
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     ) : (
-                        <div className={cx('cart-empty')}>
+                        <div className={cx(mode === 'dark' ? 'cart-empty__dark' : 'cart-empty')}>
                             <img src={cartEmpty} />
                             <h4>Giỏ hàng trống</h4>
                             <p>Bạn tham khảo thêm các sản phẩm được L2 Team gợi ý bên dưới nhé!</p>
                         </div>
                     )}
                     {carts.length > 0 && (
-                        <div className={cx('sum-price')}>
-                            <div className={cx('sum-price__total')}>
-                                <h5 className={cx('title')}>Tổng tiền hàng</h5>
-                                <span>{sumPrice?.toLocaleString()} đ</span>
-                            </div>
+                        <div className={cx(mode === 'dark' ? 'sum-price__dark' : 'sum-price')}>
                             <div className={cx('sum__price_discount')}>
                                 <h5>Chọn mã giảm giá</h5>
                                 <ul>
-                                    <li>
-                                        <img
-                                            src="https://salt.tikicdn.com/cache/128x128/ts/upload/b4/57/39/dde396bd53a086adf9d421877ad9259a.jpg"
-                                            alt=""
-                                        />
-                                        <span>Giảm giá 1.500.000 đ</span>
+                                    {dataDiscount.map((discount) => (
+                                        <li key={discount._id}>
+                                            <div className={cx('title-discount')}>
+                                                <img src={imgDiscount} alt="" />
+                                                <p>
+                                                    Giảm giá {discount.discount_percent}% cho đơn hàng tối thiểu{' '}
+                                                    {discount.discount_min_value_order.toLocaleString()} đ
+                                                </p>
+                                            </div>
 
-                                        <input type="radio" />
-                                    </li>
-
-                                    <li>
-                                        <img
-                                            src="https://salt.tikicdn.com/cache/128x128/ts/upload/b4/57/39/dde396bd53a086adf9d421877ad9259a.jpg"
-                                            alt=""
-                                        />
-                                        <span>Giảm giá 1.500.000 đ</span>
-
-                                        <input type="radio" />
-                                    </li>
-
-                                    <li>
-                                        <img
-                                            src="https://salt.tikicdn.com/cache/128x128/ts/upload/b4/57/39/dde396bd53a086adf9d421877ad9259a.jpg"
-                                            alt=""
-                                        />
-                                        <span>Giảm giá 1.500.000 đ</span>
-
-                                        <input type="radio" />
-                                    </li>
-
-                                    <li>
-                                        <img
-                                            src="https://salt.tikicdn.com/cache/128x128/ts/upload/b4/57/39/dde396bd53a086adf9d421877ad9259a.jpg"
-                                            alt=""
-                                        />
-                                        <span>Giảm giá 1.500.000 đ</span>
-
-                                        <input type="radio" />
-                                    </li>
-
-                                    <li>
-                                        <img
-                                            src="https://salt.tikicdn.com/cache/128x128/ts/upload/b4/57/39/dde396bd53a086adf9d421877ad9259a.jpg"
-                                            alt=""
-                                        />
-                                        <span>Giảm giá 1.500.000 đ</span>
-
-                                        <input type="radio" />
-                                    </li>
+                                            <Button
+                                                onClick={() => handleAddUserDiscount(discount._id)}
+                                                sx={{ width: '28%' }}
+                                                size="small"
+                                                variant="contained"
+                                                disabled={
+                                                    discount.discount_user_used.includes(dataUser._id) ||
+                                                    defaultPrice < discount.discount_min_value_order
+                                                }
+                                            >
+                                                {discount.discount_user_used.includes(dataUser._id)
+                                                    ? 'Đã áp dụng'
+                                                    : 'Áp dụng'}
+                                            </Button>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className={cx('sum-price__total')}>
-                                <h5 className={cx('title')}>Giảm giá </h5>
-                                <span> - 15.000.000 đ</span>
+                                <h5 className={cx('title')}>Giảm giá</h5>
+                                <span>{totalDiscount.toLocaleString()} đ</span>
                             </div>
 
                             <div className={cx('sum-price__total')}>
                                 <h5 className={cx('title')}>Tổng tiền thanh toán</h5>
-                                <span>15.000.000 đ</span>
+                                <span>{totalCart.toLocaleString()} đ</span>
                             </div>
 
                             <div className={cx('btn-buy')}>
-                                <button>Mua Hàng ({carts.length})</button>
+                                <Link to="/payments">
+                                    <button>Mua Hàng ({carts.length})</button>
+                                </Link>
                             </div>
                         </div>
                     )}
                 </div>
-                {/* <div className={cx('recommend')}>
-                    <h4>Có thể bạn thích</h4>
-                    <div>
-                        <Slider {...settings}>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                            <div>
-                                <CardBody />
-                            </div>
-                        </Slider>
-                    </div>
-                </div> */}
             </main>
         </div>
     );

@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { requestAddProduct } from '../../../../../../config/config';
+import { requestAddProduct } from '../../../../../config/config';
 
 const cx = classNames.bind(styles);
 

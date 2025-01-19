@@ -1,6 +1,7 @@
 import App from '../App';
 import Dashboard from '../Pages/Admin/Dashboard';
 import Cart from '../Pages/Cart/Cart';
+import CheckOut from '../Pages/checkout/CheckOut';
 import DetailProduct from '../Pages/DetailProduct/DetailProduct';
 import InfoUser from '../Pages/InfoUser/InfoUser';
 import LoginUser from '../Pages/Login/Login';
@@ -35,6 +36,10 @@ const publicRoutes = [
     {
         path: '/customer',
         component: <InfoUser />,
+    },
+    {
+        path: '/checkout/:id',
+        component: <CheckOut />,
     },
     {
         path: '/admin',
