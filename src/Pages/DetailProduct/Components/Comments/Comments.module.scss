@@ -1,0 +1,118 @@
+.wrapper {
+    padding: 10px;
+}
+
+.form__comments {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border-bottom: 1px solid rgb(242, 242, 242);
+    padding-bottom: 10px;
+    margin-top: 10px;
+}
+
+.info__user {
+    display: flex;
+    gap: 10px;
+}
+
+.info__user__name {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    p {
+        font-size: 14px;
+    }
+    h4 {
+        font-size: 14px;
+    }
+}
+
+.content__comments {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    p {
+        font-size: 14px;
+    }
+    span {
+        font-size: 12px;
+        color: #787878;
+    }
+    button {
+        width: 80px;
+        height: 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: #fff;
+        background-color: #0b74e5;
+    }
+    button:hover {
+        text-decoration: underline;
+        transition: all 0.3s;
+    }
+
+    .sub__comments {
+        border-radius: 10px;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .info__user__sub {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            h4 {
+                font-size: 14px;
+            }
+            span {
+                border-left: 1px solid #fff;
+                padding-left: 5px;
+            }
+            #icon__check {
+                color: #0b74e5;
+            }
+        }
+        .form__sub__comments {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            .inner__sub__comment {
+                background-color: #0a1929;
+                padding: 10px;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                .input__comments {
+                    padding-top: 10px;
+                    input {
+                        width: 100%;
+                        min-height: 40px;
+                        border-radius: 10px;
+                        outline: none;
+                        background: #0c2843;
+                        border: none;
+                        padding-left: 10px;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.input__comments {
+    padding-top: 10px;
+    input {
+        width: 100%;
+        min-height: 40px;
+        border-radius: 10px;
+        outline: none;
+        background: #0a1929;
+        border: none;
+        padding-left: 10px;
+        color: #fff;
+    }
+}

@@ -93,3 +93,15 @@ export const requestCheckout = async (id) => {
     const res = await request.get('/api/checkout', { params: { idOrder: id } });
     return res.data;
 };
+
+/// comments
+
+export const requestAddComment = async (data) => {
+    const res = await request.post('/api/add-comment', data);
+    return res.data;
+};
+
+export const requestGetComments = async (productId) => {
+    const res = await request.get('/api/comments', { params: { productId } });
+    return res.data;
+};

@@ -11,6 +11,7 @@ import DOMPurify from 'dompurify';
 import { useTheme } from '../../store/Provider';
 import Slider from 'react-slick';
 import { ToastContainer, toast } from 'react-toastify';
+import Comments from './Components/Comments/Comments';
 
 const cx = classNames.bind(styles);
 
@@ -91,98 +92,104 @@ function DetailProduct() {
                 <Header />
             </header>
             <main className={cx('main')}>
-                <div className={cx(mode === 'dark' ? 'left__dark' : 'left')}>
-                    {product?.images?.length > 1 ? (
-                        <Slider {...settings}>
-                            {product.images.map((image, index) => (
-                                <div key={index}>
-                                    <img
-                                        src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${image}`}
-                                        alt="123"
-                                    />
-                                </div>
-                            ))}
-                        </Slider>
-                    ) : (
-                        <div>
-                            <img src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${product?.images}`} alt="" />
-                        </div>
-                    )}
-
-                    <div className={cx(mode === 'dark' ? 'product-related__dark' : 'product-related')}>
-                        <h4>Sản phẩm liên quan</h4>
-                        <div className={cx('list-product-related')}>
-                            <ul>
-                                {brandBooks.slice(0, 5).map((brandBook, index) => (
-                                    <li key={index} onClick={() => setId(brandBook._id)}>
+                <div className={cx('inner-main')}>
+                    <div className={cx(mode === 'dark' ? 'left__dark' : 'left')}>
+                        {product?.images?.length > 1 ? (
+                            <Slider {...settings}>
+                                {product.images.map((image, index) => (
+                                    <div key={index}>
                                         <img
-                                            src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${
-                                                brandBook.images[0]
-                                            }`}
-                                            alt=""
+                                            src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${image}`}
+                                            alt="123"
                                         />
-                                        <div className={cx('product-name')}>
-                                            <h5>{brandBook.name}</h5>
-                                            <span id={cx('price')}>{brandBook.price.toLocaleString()} ₫</span>
-                                            <Rating name="read-only" value={5} readOnly size="small" />
-                                        </div>
-                                    </li>
+                                    </div>
                                 ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div className={cx(mode === 'dark' ? 'center__dark' : 'center')}>
-                    <div className={cx('info')}>
-                        <h1>{product?.name}</h1>
-                        <Box className={cx('rating')}>
-                            <span>4.5</span>
-                            <Rating name="read-only" value={5} readOnly size="small" />
-                            <p>(4)</p>
-                            <span className={cx('sold')}>| Đã Bán {product?.countBuy}</span>
-                        </Box>
-                        <span className={cx('price')}>{product?.price?.toLocaleString()} ₫</span>
-                    </div>
-                    <div className={cx('description')}>
-                        <h4>Thông tin chi tiết</h4>
-                        <div className={cx('detail')}>
-                            <div className={cx('detail-item')}>
-                                <span>Công ty phát hành</span>
-                                <p>{product?.options?.company}</p>
+                            </Slider>
+                        ) : (
+                            <div>
+                                <img
+                                    src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${product?.images}`}
+                                    alt=""
+                                />
                             </div>
+                        )}
 
-                            <div className={cx('detail-item')}>
-                                <span>Ngày xuất bản</span>
-                                <p>{product?.options?.publicationDate}</p>
-                            </div>
-
-                            <div className={cx('detail-item')}>
-                                <span>Loại bìa</span>
-                                <p>{product?.options?.type === '1' ? 'Bìa mềm' : 'Bìa cứng'}</p>
-                            </div>
-
-                            <div className={cx('detail-item')}>
-                                <span>Kích thước</span>
-                                <p>{product?.options?.size} cm</p>
-                            </div>
-
-                            <div className={cx('detail-item')}>
-                                <span>Số trang</span>
-                                <p>{product?.options?.page} trang</p>
-                            </div>
-
-                            <div className={cx('detail-item')}>
-                                <span>Nhà xuất bản</span>
-                                <p>{product?.options?.publishingHouse}</p>
+                        <div className={cx(mode === 'dark' ? 'product-related__dark' : 'product-related')}>
+                            <h4>Sản phẩm liên quan</h4>
+                            <div className={cx('list-product-related')}>
+                                <ul>
+                                    {brandBooks.slice(0, 5).map((brandBook, index) => (
+                                        <li key={index} onClick={() => setId(brandBook._id)}>
+                                            <img
+                                                src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${
+                                                    brandBook.images[0]
+                                                }`}
+                                                alt=""
+                                            />
+                                            <div className={cx('product-name')}>
+                                                <h5>{brandBook.name}</h5>
+                                                <span id={cx('price')}>{brandBook.price.toLocaleString()} ₫</span>
+                                                <Rating name="read-only" value={5} readOnly size="small" />
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     </div>
+                    <div className={cx(mode === 'dark' ? 'center__dark' : 'center')}>
+                        <div className={cx('info')}>
+                            <h1>{product?.name}</h1>
+                            <Box className={cx('rating')}>
+                                <span>4.5</span>
+                                <Rating name="read-only" value={5} readOnly size="small" />
+                                <p>(4)</p>
+                                <span className={cx('sold')}>| Đã Bán {product?.countBuy}</span>
+                            </Box>
+                            <span className={cx('price')}>{product?.price?.toLocaleString()} ₫</span>
+                        </div>
+                        <div className={cx('description')}>
+                            <h4>Thông tin chi tiết</h4>
+                            <div className={cx('detail')}>
+                                <div className={cx('detail-item')}>
+                                    <span>Công ty phát hành</span>
+                                    <p>{product?.options?.company}</p>
+                                </div>
 
-                    <div className={cx('detail-description')}>
-                        <h4>Mô tả sản phẩm</h4>
-                        <div className={cx('div')} dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+                                <div className={cx('detail-item')}>
+                                    <span>Ngày xuất bản</span>
+                                    <p>{product?.options?.publicationDate}</p>
+                                </div>
+
+                                <div className={cx('detail-item')}>
+                                    <span>Loại bìa</span>
+                                    <p>{product?.options?.type === '1' ? 'Bìa mềm' : 'Bìa cứng'}</p>
+                                </div>
+
+                                <div className={cx('detail-item')}>
+                                    <span>Kích thước</span>
+                                    <p>{product?.options?.size} cm</p>
+                                </div>
+
+                                <div className={cx('detail-item')}>
+                                    <span>Số trang</span>
+                                    <p>{product?.options?.page} trang</p>
+                                </div>
+
+                                <div className={cx('detail-item')}>
+                                    <span>Nhà xuất bản</span>
+                                    <p>{product?.options?.publishingHouse}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={cx('detail-description')}>
+                            <h4>Mô tả sản phẩm</h4>
+                            <div className={cx('div')} dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+                        </div>
                     </div>
                 </div>
+
                 <div className={cx(mode === 'dark' ? 'right__dark' : 'right')}>
                     <div>
                         <div className={cx('quantity-left')}>
@@ -239,49 +246,14 @@ function DetailProduct() {
                                     <span className={cx('time')}>12/12/2024</span>
                                 </div>
                             </div>
-
-                            <div className={cx('feed-back-item-left')}>
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/468635100_2030335600772187_8549397888606208782_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=4i0l7tJGlYkQ7kNvgG8SF1x&_nc_oc=AdjxM7_BD6oHPGnki5DHSjtVSaNXZ-Kit8Lx6mzvtCfqE08kG-msHgVri4I_rZ6wE2lMksScatVlNdA_BwUUi8Vg&_nc_zt=24&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AZs6NpFZ6wjmK_D9vXSO805&oh=00_AYA4MzhE62btNFzyCuDTfCNJ9f8CuqEaPNSA15Zh9EYX2w&oe=676D5C0B"
-                                />
-                                <div className={cx('feed-back-item-right')}>
-                                    <h5>Nguyễn Văn A</h5>
-                                    <Rating name="read-only" value={5} readOnly size="small" />
-                                    <p>Shop đóng gói cẩn thận, giao hàng đúng theo thời gian dự kiến. cảm ơn shop!</p>
-                                    <span className={cx('time')}>12/12/2024</span>
-                                </div>
-                            </div>
-
-                            <div className={cx('feed-back-item-left')}>
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/468635100_2030335600772187_8549397888606208782_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=4i0l7tJGlYkQ7kNvgG8SF1x&_nc_oc=AdjxM7_BD6oHPGnki5DHSjtVSaNXZ-Kit8Lx6mzvtCfqE08kG-msHgVri4I_rZ6wE2lMksScatVlNdA_BwUUi8Vg&_nc_zt=24&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AZs6NpFZ6wjmK_D9vXSO805&oh=00_AYA4MzhE62btNFzyCuDTfCNJ9f8CuqEaPNSA15Zh9EYX2w&oe=676D5C0B"
-                                />
-                                <div className={cx('feed-back-item-right')}>
-                                    <h5>Nguyễn Văn A</h5>
-                                    <Rating name="read-only" value={5} readOnly size="small" />
-                                    <p>Shop đóng gói cẩn thận, giao hàng đúng theo thời gian dự kiến. cảm ơn shop!</p>
-                                    <span className={cx('time')}>12/12/2024</span>
-                                </div>
-                            </div>
-
-                            <div className={cx('feed-back-item-left')}>
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/468635100_2030335600772187_8549397888606208782_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=4i0l7tJGlYkQ7kNvgG8SF1x&_nc_oc=AdjxM7_BD6oHPGnki5DHSjtVSaNXZ-Kit8Lx6mzvtCfqE08kG-msHgVri4I_rZ6wE2lMksScatVlNdA_BwUUi8Vg&_nc_zt=24&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AZs6NpFZ6wjmK_D9vXSO805&oh=00_AYA4MzhE62btNFzyCuDTfCNJ9f8CuqEaPNSA15Zh9EYX2w&oe=676D5C0B"
-                                />
-                                <div className={cx('feed-back-item-right')}>
-                                    <h5>Nguyễn Văn A</h5>
-                                    <Rating name="read-only" value={5} readOnly size="small" />
-                                    <p>Shop đóng gói cẩn thận, giao hàng đúng theo thời gian dự kiến. cảm ơn shop!</p>
-                                    <span className={cx('time')}>12/12/2024</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </main>
+
+            <div className={cx('comment')}>
+                <Comments productId={id} />
+            </div>
         </div>
     );
 }

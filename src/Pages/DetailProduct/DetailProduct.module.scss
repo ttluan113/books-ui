@@ -1,9 +1,22 @@
+.wrapper {
+    position: relative;
+}
+
 .main {
     width: 70%;
     margin: 20px auto;
     display: grid;
-    grid-template-columns: 24% 45% 30%;
-    gap: 1%;
+    grid-template-columns: 1fr 360px;
+    align-items: start;
+    gap: 16px;
+    .inner-main {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 24px;
+        border-radius: 8px;
+        -webkit-box-align: start;
+        align-items: start;
+    }
 }
 
 .left {
@@ -12,6 +25,7 @@
     border-radius: 10px;
     position: sticky;
     top: 10px;
+    height: fit-content;
     img {
         width: 100%;
         height: 100%;
@@ -241,6 +255,9 @@
     position: sticky;
     top: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    align-items: stretch;
+
     .feed-back {
         h4 {
             color: #fff;
@@ -362,4 +379,11 @@
 .div {
     line-height: 1.5;
     text-align: justify;
+}
+
+.comment {
+    width: 70%;
+    background: #0c2843;
+    border-radius: 10px;
+    margin: 0px auto;
 }
