@@ -1,6 +1,7 @@
 import { requestAuth } from '../config/config';
 import Context from './Context';
 import CryptoJS from 'crypto-js';
+import { io } from 'socket.io-client';
 
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +10,7 @@ import { useEffect, useState, useMemo, useContext, createContext } from 'react';
 
 export function Provider({ children }) {
     const [dataUser, setDataUser] = useState({});
+    const [socket, setSocket] = useState(null);
 
     const token = document.cookie;
 
@@ -20,13 +22,24 @@ export function Provider({ children }) {
             const user = JSON.parse(originalText);
             setDataUser(user);
         };
+
+        const socket = io('https://book.local2', { transports: ['websocket'] });
+        socket.on('connect', () => {
+            console.log('connected');
+            setSocket(socket);
+        });
+
         if (token === '') {
             return;
         }
         fetchData();
+
+        return () => {
+            socket.disconnect();
+        };
     }, []);
 
-    return <Context.Provider value={dataUser}>{children}</Context.Provider>;
+    return <Context.Provider value={{ dataUser, socket }}>{children}</Context.Provider>;
 }
 
 const ThemeContext = createContext();

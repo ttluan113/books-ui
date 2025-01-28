@@ -26,7 +26,7 @@ function Cart() {
     const [dataDiscount, setDataDiscount] = useState([]);
     const [totalCart, setTotalCart] = useState(0);
 
-    const dataUser = useStore();
+    const { dataUser } = useStore();
     const { mode } = useTheme();
 
     // Fetch cart data

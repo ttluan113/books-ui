@@ -14,6 +14,10 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '../../store/Provider';
 import { toast, ToastContainer } from 'react-toastify';
 
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Autocomplete from '@mui/material/Autocomplete';
+
 const cx = classNames.bind(styles);
 
 function Payments() {
@@ -23,15 +27,14 @@ function Payments() {
 
     const { mode } = useTheme();
 
-    const [inputValue, setInputValue] = useState('');
+    const [inputValueAddress, setInputValueAddress] = useState('');
     const [selectValue, setSelectValue] = useState([]);
-    const valueSearch = useDebounce(inputValue, 500);
+    const valueSearch = useDebounce(inputValueAddress, 500);
     const [address, setAddress] = useState('');
-    const [checkModalSelect, setCheckModalSelect] = useState(false);
 
     const [checkTypePayment, setCheckTypePayment] = useState('COD');
 
-    const dataUser = useStore();
+    const { dataUser } = useStore();
 
     const [fullName, setFullName] = useState('');
     const [phone, setPhone] = useState('');
@@ -64,7 +67,6 @@ function Payments() {
         const fetchData = async () => {
             const res = await requestSearchAddress(valueSearch);
             setSelectValue(res);
-            if (res.length > 0) setCheckModalSelect(true);
         };
         fetchData();
     }, [valueSearch]);
@@ -132,35 +134,40 @@ function Payments() {
                     <div className={cx(mode === 'dark' ? 'form__input__dark' : 'form__input')}>
                         <h4>Thông tin nhận hàng</h4>
                         <div className={cx('form__input__list')}>
-                            <input
-                                placeholder="Nhập số điện thoại"
+                            <TextField
+                                id="outlined-basic"
+                                label="Số điện thoại"
+                                variant="outlined"
                                 onChange={(e) => setPhone(e.target.value)}
                                 value={phone}
                             />
-                            <input
-                                placeholder="Nhập địa chỉ..."
-                                onChange={(e) => setInputValue(e.target.value)}
-                                value={inputValue || dataUser.address}
-                            />
-                            {checkModalSelect && (
-                                <div className={cx('custom-dropdown')}>
-                                    {selectValue.map((item, index) => (
-                                        <div
-                                            onClick={() => {
-                                                setAddress(item.description);
-                                                setInputValue(item.description);
-                                                setCheckModalSelect(false);
-                                                setSelectValue([]);
+
+                            <Stack spacing={2} sx={{ width: '100%' }}>
+                                <Autocomplete
+                                    freeSolo
+                                    id="free-solo-2-demo"
+                                    disableClearable
+                                    options={selectValue.map((option) => option.description)}
+                                    value={address}
+                                    onChange={(event, newValue) => {
+                                        setAddress(newValue);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            sx={{ width: '100%' }}
+                                            label="Nhập địa chỉ"
+                                            onChange={(e) => setInputValueAddress(e.target.value)}
+                                            slotProps={{
+                                                input: {
+                                                    ...params.InputProps,
+                                                    type: 'search',
+                                                },
                                             }}
-                                            key={index}
-                                            className={cx(mode === 'dark' ? 'dropdown-item__dark' : 'dropdown-item')}
-                                        >
-                                            <FontAwesomeIcon icon={faLocationDot} className={cx('icon')} />
-                                            <span>{item.description}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                                        />
+                                    )}
+                                />
+                            </Stack>
                         </div>
                     </div>
 
@@ -214,7 +221,7 @@ function Payments() {
                 </div>
                 <div className={cx(mode === 'dark' ? 'right__dark' : 'right')}>
                     <div className={cx('right__header')}>
-                        <h4>Giao tới</h4>
+                        <h4>Giao tới </h4>
                     </div>
                     <div className={cx('right__address')}>
                         <div className={cx(mode === 'dark' ? 'right__address__info__dark' : 'right__address__info')}>

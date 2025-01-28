@@ -4,7 +4,7 @@ import { Avatar } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import { requestAddComment, requestGetComments } from '../../../../config/config';
+import { requestAddComment, requestGetComments, requestPostNotify } from '../../../../config/config';
 import { toast, ToastContainer } from 'react-toastify';
 import TimeAgo from '../../../../utils/TimeAgo';
 import { useStore } from '../../../../hooks/useStore';
@@ -14,10 +14,11 @@ const cx = classNames.bind(styles);
 function Comments({ productId }) {
     const [showInput, setShowInput] = useState(false);
     const [dataComments, setDataComments] = useState([]);
-    const [idRelyComment, setIdRelyComment] = useState('');
+    const [idCommentRoot, setIdCommentRoot] = useState('');
     const [idComment, setIdComment] = useState('');
+    const [valueInputRoot, setValueInputRoot] = useState('');
 
-    const dataUser = useStore();
+    const { dataUser } = useStore();
 
     const [valueInput, setValueInput] = useState('');
 
@@ -30,16 +31,24 @@ function Comments({ productId }) {
         fetchData();
     }, [productId]);
 
-    const handleAddComment = async () => {
+    const handleAddComment = async (userId) => {
         try {
             const data = {
-                content: valueInput,
+                content: valueInput || valueInputRoot,
                 productId,
-                idRelyComment: idRelyComment || null,
+                parentId: !idComment ? null : idComment,
+            };
+            const dataNotify = {
+                type: 'COMMENT',
+                userId,
+                productId,
             };
             await requestAddComment(data);
-            fetchData();
+            await requestPostNotify(dataNotify);
             setValueInput('');
+            setIdComment('');
+            setValueInputRoot('');
+            fetchData();
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -48,11 +57,12 @@ function Comments({ productId }) {
     return (
         <div className={cx('wrapper')}>
             <ToastContainer />
-            <div>
+            <div className={cx('form__comments__root')}>
                 <input
                     onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
-                    onChange={(e) => setValueInput(e.target.value)}
+                    onChange={(e) => setValueInputRoot(e.target.value)}
                     placeholder={`Nhập bình luận....`}
+                    value={valueInputRoot}
                 />
             </div>
 
@@ -61,11 +71,13 @@ function Comments({ productId }) {
                     <div className={cx('info__user')}>
                         <Avatar
                             sx={{ width: '50px', height: '50px' }}
-                            src="https://media.baoquangninh.vn/upload/image/202403/medium/2188763_5cd5a5702b4e0c50783c3dcd83b40f74.jpg"
+                            src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${comment.user.avatar}`}
                         />
                         <div className={cx('info__user__name')}>
-                            <h4>Sơn Tùng MTP</h4>
-                            <p>Đã tham gia 6 năm</p>
+                            <h4>{comment.user.fullName}</h4>
+                            <p>
+                                Đã tham gia <TimeAgo createdAt={comment.user.createdAt} />
+                            </p>
                         </div>
                     </div>
 
@@ -74,59 +86,69 @@ function Comments({ productId }) {
                         <span>
                             Bình luận vào <TimeAgo createdAt={comment.createdAt} />
                         </span>
-                        {dataUser.isAdmin === true && (
+                        {(dataUser.isAdmin || dataUser._id === comment.userId) && (
                             <button
                                 onClick={() => {
                                     setShowInput(true);
+                                    setIdCommentRoot(comment._id);
                                     setIdComment(comment._id);
-                                    setIdRelyComment(comment._id);
                                 }}
                             >
                                 Phản hồi
                             </button>
                         )}
-                        {showInput && comment._id === idComment && (
+
+                        {showInput && comment._id === idCommentRoot && (
                             <div className={cx('input__comments')}>
                                 <input
-                                    onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleAddComment(comment.userId)}
                                     onChange={(e) => setValueInput(e.target.value)}
-                                    placeholder={`Trả lời bình luận ${comment._id}`}
+                                    placeholder={`Trả lời bình luận ${comment.user.fullName}`}
+                                    value={valueInput}
                                 />
                             </div>
                         )}
 
                         <div className={cx('sub__comments')}>
                             <div className={cx('form__sub__comments')}>
-                                {comment?.subComment?.length > 0 &&
-                                    comment?.subComment?.map((subComment) => (
+                                {comment?.subComments?.length > 0 &&
+                                    comment?.subComments?.map((subComment) => (
                                         <div className={cx('inner__sub__comment')}>
                                             <div className={cx('info__user__sub')}>
                                                 <Avatar
                                                     sx={{ width: '35px', height: '35px' }}
-                                                    src="https://doanwebsite.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.f7df9eb5.webp&w=64&q=100"
+                                                    src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${
+                                                        subComment.user.avatar
+                                                    }`}
                                                 />
-                                                <h4>L2 Team Trading</h4>
-                                                <FontAwesomeIcon id={cx('icon__check')} icon={faCheckCircle} />
+                                                <h4>{subComment.user.fullName}</h4>
+                                                {subComment.user.isAdmin === true && (
+                                                    <FontAwesomeIcon id={cx('icon__check')} icon={faCheckCircle} />
+                                                )}
                                             </div>
                                             <p>{subComment.content}</p>
                                             {dataUser.isAdmin === true && dataUser._id === subComment.userId && (
                                                 <button
                                                     onClick={() => {
                                                         setShowInput(true);
-                                                        setIdComment(subComment._id);
-                                                        setIdRelyComment(comment._id);
+                                                        setIdCommentRoot(subComment._id);
+                                                        setIdComment(comment._id);
+                                                        setValueInput('');
                                                     }}
                                                 >
                                                     Phản hồi
                                                 </button>
                                             )}
 
-                                            {showInput && subComment._id === idComment && (
+                                            {showInput && subComment._id === idCommentRoot && (
                                                 <div className={cx('input__comments')}>
                                                     <input
-                                                        placeholder={`Trả lời bình luận ${subComment._id}`}
+                                                        placeholder={`Trả lời bình luận ${subComment.user.fullName}`}
                                                         onChange={(e) => setValueInput(e.target.value)}
-                                                        onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
+                                                        onKeyDown={(e) =>
+                                                            e.key === 'Enter' && handleAddComment(subComment.userId)
+                                                        }
+                                                        value={valueInput}
                                                     />
                                                 </div>
                                             )}

@@ -27,28 +27,22 @@ const settings = {
 function DetailProduct() {
     const [quantity, setQuantity] = useState(1);
     const [brandBooks, setBrandBooks] = useState([]);
-    const [id, setId] = useState();
+
     const [product, setProduct] = useState({});
+    const [sumPrice, setSumPrice] = useState(0);
 
-    const params = useParams();
+    const { id } = useParams();
     const { mode } = useTheme();
-
-    useEffect(() => {
-        setId(params.id);
-    }, [params]);
 
     const fetchData = async () => {
         const res = await requestGetProduct(id);
         setProduct(res.product);
         setBrandBooks(res.brandProducts);
     };
-    useEffect(() => {
-        fetchData();
-    }, [params, id]);
 
     useEffect(() => {
-        document.title = `Chi tiết sản phẩm - ${product?.name}`;
-    }, [product]);
+        fetchData();
+    }, [id]);
 
     const onIncreaseQuantity = () => {
         setQuantity(quantity + 1);
@@ -61,8 +55,6 @@ function DetailProduct() {
             setQuantity(quantity - 1);
         }
     };
-
-    const [sumPrice, setSumPrice] = useState(0);
 
     useEffect(() => {
         const price = product?.price * quantity;
@@ -211,7 +203,6 @@ function DetailProduct() {
                         </div>
 
                         <div className={cx('button-group')}>
-                            <button className={cx('button-buy')}>Mua Ngay</button>
                             <button onClick={handleAddCart} className={cx('button-add-to-cart')}>
                                 Thêm Vào Giỏ Hàng
                             </button>

@@ -1,7 +1,16 @@
 import classNames from 'classnames/bind';
 import styles from './SlideBar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBlog, faCartPlus, faChartLine, faFile, faHome, faTag, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+    faBlog,
+    faCartPlus,
+    faChartLine,
+    faFile,
+    faHome,
+    faMessage,
+    faTag,
+    faUser,
+} from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 function SlideBar({ setType, type }) {
@@ -21,6 +30,11 @@ function SlideBar({ setType, type }) {
                     <li onClick={() => onType(1)} id={cx(type === 1 && 'active')}>
                         <FontAwesomeIcon id={cx('icons')} icon={faFile} />
                         <h5> Đơn Hàng</h5>
+                    </li>
+
+                    <li onClick={() => onType(6)} id={cx(type === 6 && 'active')}>
+                        <FontAwesomeIcon id={cx('icons')} icon={faMessage} />
+                        <h5>Tin Nhắn</h5>
                     </li>
 
                     <li onClick={() => onType(2)} id={cx(type === 2 && 'active')}>

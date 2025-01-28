@@ -12,10 +12,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { useState } from 'react';
-import { requestLogout } from '../../config/config';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+import { useEffect, useState } from 'react';
+import { requestGetNotify, requestLogout } from '../../config/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon, faSun } from '@fortawesome/free-regular-svg-icons';
 
@@ -25,7 +28,9 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 function Header() {
-    const dataUser = useStore();
+    const { dataUser } = useStore();
+
+    const [dataNotify, setDataNotify] = useState([]);
 
     const { mode, toggleTheme } = useTheme();
 
@@ -44,6 +49,14 @@ function Header() {
             window.location.reload();
         }, 1000);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await requestGetNotify();
+            setDataNotify(res);
+        };
+        // fetchData();
+    }, [dataUser.id !== '']);
 
     const [showNotify, setShowNotify] = useState(false);
 
@@ -88,27 +101,21 @@ function Header() {
                                     </div>
                                     <div>
                                         <ul>
-                                            <li>
-                                                <img
-                                                    src="https://salt.tikicdn.com/cache/128x128/ts/upload/b4/57/39/dde396bd53a086adf9d421877ad9259a.jpg"
-                                                    alt=""
-                                                />
-                                                <div className={cx('result__notify__info')}>
-                                                    <p>Tặng bạn mã giảm giá 100% sản phẩm</p>
-                                                    <span>24/12/2024</span>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <img
-                                                    src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/468635100_2030335600772187_8549397888606208782_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=4i0l7tJGlYkQ7kNvgG8SF1x&_nc_oc=AdjxM7_BD6oHPGnki5DHSjtVSaNXZ-Kit8Lx6mzvtCfqE08kG-msHgVri4I_rZ6wE2lMksScatVlNdA_BwUUi8Vg&_nc_zt=24&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AZs6NpFZ6wjmK_D9vXSO805&oh=00_AYA4MzhE62btNFzyCuDTfCNJ9f8CuqEaPNSA15Zh9EYX2w&oe=676D5C0B"
-                                                    alt=""
-                                                />
-                                                <div className={cx('result__notify__info')}>
-                                                    <p>Trần Luân đã phản hồi bình luận của bạn</p>
-                                                    <span>24/12/2024</span>
-                                                </div>
-                                            </li>
+                                            {dataNotify.map((notify) => (
+                                                <Link to={`product/${notify.productId}`} key={notify._id}>
+                                                    <li>
+                                                        <img
+                                                            src="http://localhost:5001/uploads/avatars/1737826973701.webp"
+                                                            alt=""
+                                                        />
+                                                        <div className={cx('result__notify__info')}>
+                                                            <h4>{notify.fullName}</h4>
+                                                            <p>Đã trả lời bình luận của bạn</p>
+                                                            <span>24/12/2024</span>
+                                                        </div>
+                                                    </li>
+                                                </Link>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
@@ -179,6 +186,15 @@ function Header() {
                                         <Settings fontSize="small" />
                                     </ListItemIcon>
                                     Cài đặt tài khoản
+                                </MenuItem>
+                            </Link>
+
+                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={'/order'}>
+                                <MenuItem onClick={handleClose}>
+                                    <ListItemIcon>
+                                        <ShoppingCartIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    Đơn hàng của tôi
                                 </MenuItem>
                             </Link>
 

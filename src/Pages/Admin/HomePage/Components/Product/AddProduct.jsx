@@ -72,7 +72,6 @@ function AddProduct() {
             page,
             publishingHouse,
         };
-        console.log(options);
 
         const formData = new FormData();
         formData.append('name', name);
@@ -130,6 +129,7 @@ function AddProduct() {
                             label="Tên sản phẩm"
                             variant="outlined"
                             onChange={(e) => setName(e.target.value)}
+                            value={name}
                         />
                         <TextField
                             sx={{
@@ -150,6 +150,7 @@ function AddProduct() {
                             variant="outlined"
                             type="number"
                             onChange={(e) => setPrice(e.target.value)}
+                            value={price}
                         />
                         <TextField
                             sx={{
@@ -170,6 +171,7 @@ function AddProduct() {
                             variant="outlined"
                             type="number"
                             onChange={(e) => setQuantity(e.target.value)}
+                            value={quantity}
                         />
                         <TextField
                             sx={{
@@ -189,6 +191,7 @@ function AddProduct() {
                             label="Công ty phát hành"
                             variant="outlined"
                             onChange={(e) => setCompany(e.target.value)}
+                            value={company}
                         />
 
                         <TextField
@@ -209,6 +212,7 @@ function AddProduct() {
                             variant="outlined"
                             onChange={(e) => setPublicationDate(e.target.value)}
                             type="date"
+                            value={publicationDate}
                         />
 
                         <Select
@@ -257,6 +261,7 @@ function AddProduct() {
                             label="Kích thước"
                             variant="outlined"
                             onChange={(e) => setSize(e.target.value)}
+                            value={size}
                         />
 
                         <TextField
@@ -278,6 +283,7 @@ function AddProduct() {
                             variant="outlined"
                             type="number"
                             onChange={(e) => setPage(e.target.value)}
+                            value={page}
                         />
 
                         <TextField
@@ -298,6 +304,7 @@ function AddProduct() {
                             label="Nhà xuất bản"
                             variant="outlined"
                             onChange={(e) => setPublishingHouse(e.target.value)}
+                            value={publishingHouse}
                         />
                     </div>
                     <div className={cx('form__editor')}>
@@ -313,6 +320,7 @@ function AddProduct() {
                             onEditorChange={(content, editor) => {
                                 setDescription(content);
                             }}
+                            value={description}
                         />
                     </div>
                 </div>

@@ -32,6 +32,11 @@ export const requestSearchAddress = async (address) => {
     return res.data;
 };
 
+export const requestEditUser = async (data) => {
+    const res = await request.post('/api/edit-user', data);
+    return res.data;
+};
+
 /// product
 
 export const requestAddProduct = async (data) => {
@@ -94,6 +99,16 @@ export const requestCheckout = async (id) => {
     return res.data;
 };
 
+export const requestGetHistoryOrder = async (params) => {
+    const res = await request.get('/api/history-order', { params: params });
+    return res.data;
+};
+
+export const requestEditOrder = async (data) => {
+    const res = await request.post('/api/edit-order', data);
+    return res.data;
+};
+
 /// comments
 
 export const requestAddComment = async (data) => {
@@ -103,5 +118,16 @@ export const requestAddComment = async (data) => {
 
 export const requestGetComments = async (productId) => {
     const res = await request.get('/api/comments', { params: { productId } });
+    return res.data;
+};
+
+//// notify
+export const requestPostNotify = async (data) => {
+    const res = await request.post('/api/add-notify', data);
+    return res.data;
+};
+
+export const requestGetNotify = async () => {
+    const res = await request.get('/api/notify');
     return res.data;
 };

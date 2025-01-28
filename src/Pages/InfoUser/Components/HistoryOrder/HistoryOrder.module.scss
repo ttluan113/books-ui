@@ -1,0 +1,25 @@
+.wrapper {
+    h4 {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
+    }
+}
+
+.header__history {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 10px 0px;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header__history__item {
+    text-align: center;
+    p:hover {
+        cursor: pointer;
+    }
+    #active {
+        border-bottom: 2px solid #0b74e5;
+    }
+}
