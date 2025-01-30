@@ -41,7 +41,7 @@ function Order() {
             case 3:
                 setParams('delivered');
                 break;
-            case 3:
+            case 4:
                 setParams('cancelled');
                 break;
             default:

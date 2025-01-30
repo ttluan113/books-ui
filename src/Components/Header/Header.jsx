@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import logo from '../../../public/images/logo.webp';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../hooks/useStore';
 
 import Box from '@mui/material/Box';
@@ -25,14 +25,18 @@ import { faBell, faMoon, faSun } from '@fortawesome/free-regular-svg-icons';
 import { useTheme } from '../../store/Provider';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 
+import TimeAgo from '../../utils/TimeAgo';
+
 const cx = classNames.bind(styles);
 
 function Header() {
-    const { dataUser } = useStore();
+    const { dataUser, newNotify } = useStore();
 
     const [dataNotify, setDataNotify] = useState([]);
 
     const { mode, toggleTheme } = useTheme();
+
+    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -50,13 +54,21 @@ function Header() {
         }, 1000);
     };
 
+    const onNavigateProduct = (path) => {
+        navigate(path);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const res = await requestGetNotify();
             setDataNotify(res);
         };
-        // fetchData();
+        fetchData();
     }, [dataUser.id !== '']);
+
+    useEffect(() => {
+        setDataNotify([...dataNotify, newNotify]);
+    }, [newNotify]);
 
     const [showNotify, setShowNotify] = useState(false);
 
@@ -85,6 +97,9 @@ function Header() {
                             </Tooltip>
                         </Link>
                         <div className={cx('notify')}>
+                            <div className={cx(mode === 'dark' ? 'number__notify__dark' : 'number__notify')}>
+                                {dataNotify.length}
+                            </div>
                             <button onClick={() => setShowNotify(!showNotify)}>
                                 <Tooltip title={!showNotify && 'Thông báo'}>
                                     <FontAwesomeIcon
@@ -98,23 +113,28 @@ function Header() {
                                 <div className={cx(mode === 'dark' ? 'result__notify__dark' : 'result__notify')}>
                                     <div className={cx('result__notify__header')}>
                                         <h3>Thông Báo</h3>
+                                        <span>Đánh dấu tất cả đã đọc</span>
                                     </div>
                                     <div>
                                         <ul>
                                             {dataNotify.map((notify) => (
-                                                <Link to={`product/${notify.productId}`} key={notify._id}>
-                                                    <li>
-                                                        <img
-                                                            src="http://localhost:5001/uploads/avatars/1737826973701.webp"
-                                                            alt=""
-                                                        />
-                                                        <div className={cx('result__notify__info')}>
-                                                            <h4>{notify.fullName}</h4>
-                                                            <p>Đã trả lời bình luận của bạn</p>
-                                                            <span>24/12/2024</span>
-                                                        </div>
-                                                    </li>
-                                                </Link>
+                                                <li
+                                                    key={notify._id}
+                                                    onClick={() => onNavigateProduct(`/product/${notify.productId}`)}
+                                                    id={cx(notify.isRead ? '' : 'no__read')}
+                                                >
+                                                    <img
+                                                        src="http://localhost:5001/uploads/avatars/1737826973701.webp"
+                                                        alt=""
+                                                    />
+                                                    <div className={cx('result__notify__info')}>
+                                                        <h4>{notify.fullName}</h4>
+                                                        <p>{notify.content}</p>
+                                                        <span>
+                                                            <TimeAgo timestamp={notify.createdAt} />
+                                                        </span>
+                                                    </div>
+                                                </li>
                                             ))}
                                         </ul>
                                     </div>

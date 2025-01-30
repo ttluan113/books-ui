@@ -11,6 +11,7 @@ import { useEffect, useState, useMemo, useContext, createContext } from 'react';
 export function Provider({ children }) {
     const [dataUser, setDataUser] = useState({});
     const [socket, setSocket] = useState(null);
+    const [newNotify, setNewNotify] = useState({});
 
     const token = document.cookie;
 
@@ -23,23 +24,29 @@ export function Provider({ children }) {
             setDataUser(user);
         };
 
-        const socket = io('https://book.local2', { transports: ['websocket'] });
-        socket.on('connect', () => {
-            console.log('connected');
-            setSocket(socket);
-        });
-
         if (token === '') {
             return;
         }
         fetchData();
+    }, []);
 
+    useEffect(() => {
+        const socket = io('https://book.local2', { transports: ['websocket'] });
+        socket.on('connection', () => {
+            console.log('connected');
+            setSocket(socket);
+        });
+
+        socket.on('notifyComment', (data) => {
+            setNewNotify(data);
+            console.log(data);
+        });
         return () => {
             socket.disconnect();
         };
-    }, []);
+    }, [socket, newNotify]);
 
-    return <Context.Provider value={{ dataUser, socket }}>{children}</Context.Provider>;
+    return <Context.Provider value={{ dataUser, socket, newNotify }}>{children}</Context.Provider>;
 }
 
 const ThemeContext = createContext();

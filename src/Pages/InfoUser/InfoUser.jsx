@@ -5,7 +5,7 @@ import Header from '../../Components/Header/Header';
 
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
+import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faGift, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import Personal from './Components/Personal/Personal';
 import HistoryOrder from './Components/HistoryOrder/HistoryOrder';
@@ -17,7 +17,6 @@ const cx = classNames.bind(styles);
 const listController = [
     { name: 'Thông tin tài khoản', icon: faUser, path: 'customer' },
     { name: 'Quản lý đơn hàng', icon: faGift, path: 'order' },
-    { name: 'Đánh giá sản phẩm', icon: faEnvelope, path: 'review' },
     { name: 'Sản phẩm yêu thích', icon: faHeart, path: 'favorite' },
     { name: 'Sổ địa chỉ', icon: faLocationDot, path: 'address' },
 ];
@@ -35,6 +34,15 @@ function InfoUser() {
                 break;
             case '/order':
                 setType(1);
+                break;
+            case '/review':
+                setType(2);
+                break;
+            case '/favorite':
+                setType(3);
+                break;
+            case '/address':
+                setType(4);
                 break;
             default:
                 break;
@@ -75,7 +83,7 @@ function InfoUser() {
                         </ul>
                     </div>
                 </div>
-                <div className={cx('right')}>{type === 0 ? <Personal /> : <HistoryOrder />}</div>
+                <div className={cx('right')}>{type === 0 ? <Personal /> : type === 1 ? <HistoryOrder /> : <></>}</div>
             </main>
         </div>
     );

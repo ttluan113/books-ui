@@ -127,7 +127,7 @@ function Comments({ productId }) {
                                                 )}
                                             </div>
                                             <p>{subComment.content}</p>
-                                            {dataUser.isAdmin === true && dataUser._id === subComment.userId && (
+                                            {(dataUser.isAdmin === true || dataUser._id === comment.userId) && (
                                                 <button
                                                     onClick={() => {
                                                         setShowInput(true);

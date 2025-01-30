@@ -12,6 +12,8 @@ import { useTheme } from '../../store/Provider';
 import Slider from 'react-slick';
 import { ToastContainer, toast } from 'react-toastify';
 import Comments from './Components/Comments/Comments';
+import TimeAgo from '../../utils/TimeAgo';
+import Messenger from './Components/Messenger/Messenger';
 
 const cx = classNames.bind(styles);
 
@@ -27,9 +29,13 @@ const settings = {
 function DetailProduct() {
     const [quantity, setQuantity] = useState(1);
     const [brandBooks, setBrandBooks] = useState([]);
+    const [dataFeedback, setDataFeedback] = useState([]);
+    const [ratingProduct, setRatingProduct] = useState(0);
 
     const [product, setProduct] = useState({});
     const [sumPrice, setSumPrice] = useState(0);
+
+    const [showMessenger, setShowMessenger] = useState(false);
 
     const { id } = useParams();
     const { mode } = useTheme();
@@ -38,6 +44,13 @@ function DetailProduct() {
         const res = await requestGetProduct(id);
         setProduct(res.product);
         setBrandBooks(res.brandProducts);
+        setDataFeedback(res.feedbackUser);
+
+        const totalRating = res.feedbackUser.reduce((total, item) => total + item.rating, 0);
+        const averageRating = totalRating / res.feedbackUser.length;
+        setRatingProduct(averageRating.toFixed(1));
+
+        document.title = res.product.name;
     };
 
     useEffect(() => {
@@ -133,9 +146,9 @@ function DetailProduct() {
                         <div className={cx('info')}>
                             <h1>{product?.name}</h1>
                             <Box className={cx('rating')}>
-                                <span>4.5</span>
+                                <span>{ratingProduct}</span>
                                 <Rating name="read-only" value={5} readOnly size="small" />
-                                <p>(4)</p>
+                                <p>({dataFeedback?.length})</p>
                                 <span className={cx('sold')}>| Đã Bán {product?.countBuy}</span>
                             </Box>
                             <span className={cx('price')}>{product?.price?.toLocaleString()} ₫</span>
@@ -212,31 +225,22 @@ function DetailProduct() {
                     <div className={cx('feed-back')}>
                         <h4>Khách hàng đánh giá</h4>
                         <div className={cx('feed-back-item')}>
-                            <div className={cx('feed-back-item-left')}>
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/468635100_2030335600772187_8549397888606208782_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=4i0l7tJGlYkQ7kNvgG8SF1x&_nc_oc=AdjxM7_BD6oHPGnki5DHSjtVSaNXZ-Kit8Lx6mzvtCfqE08kG-msHgVri4I_rZ6wE2lMksScatVlNdA_BwUUi8Vg&_nc_zt=24&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AZs6NpFZ6wjmK_D9vXSO805&oh=00_AYA4MzhE62btNFzyCuDTfCNJ9f8CuqEaPNSA15Zh9EYX2w&oe=676D5C0B"
-                                />
-                                <div className={cx('feed-back-item-right')}>
-                                    <h5>Nguyễn Văn A</h5>
-                                    <Rating name="read-only" value={5} readOnly size="small" />
-                                    <p>Shop đóng gói cẩn thận, giao hàng đúng theo thời gian dự kiến. cảm ơn shop!</p>
-                                    <span className={cx('time')}>12/12/2024</span>
+                            {dataFeedback.map((feedback) => (
+                                <div key={feedback?._id} className={cx('feed-back-item-left')}>
+                                    <Avatar
+                                        alt={feedback?.name}
+                                        src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${feedback?.avatar}`}
+                                    />
+                                    <div className={cx('feed-back-item-right')}>
+                                        <h5>{feedback?.name}</h5>
+                                        <Rating name="read-only" value={feedback?.rating} readOnly size="small" />
+                                        <p>{feedback?.content}</p>
+                                        <span className={cx('time')}>
+                                            <TimeAgo datetime={feedback?.createdAt} locale="vi" />
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className={cx('feed-back-item-left')}>
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/468635100_2030335600772187_8549397888606208782_n.jpg?stp=cp6_dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=4i0l7tJGlYkQ7kNvgG8SF1x&_nc_oc=AdjxM7_BD6oHPGnki5DHSjtVSaNXZ-Kit8Lx6mzvtCfqE08kG-msHgVri4I_rZ6wE2lMksScatVlNdA_BwUUi8Vg&_nc_zt=24&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AZs6NpFZ6wjmK_D9vXSO805&oh=00_AYA4MzhE62btNFzyCuDTfCNJ9f8CuqEaPNSA15Zh9EYX2w&oe=676D5C0B"
-                                />
-                                <div className={cx('feed-back-item-right')}>
-                                    <h5>Nguyễn Văn A</h5>
-                                    <Rating name="read-only" value={5} readOnly size="small" />
-                                    <p>Shop đóng gói cẩn thận, giao hàng đúng theo thời gian dự kiến. cảm ơn shop!</p>
-                                    <span className={cx('time')}>12/12/2024</span>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -244,6 +248,18 @@ function DetailProduct() {
 
             <div className={cx('comment')}>
                 <Comments productId={id} />
+            </div>
+
+            <div className={cx('messager')}>
+                {showMessenger && (
+                    <div className={cx('form__messager')}>
+                        <Messenger />
+                    </div>
+                )}
+                <div onClick={() => setShowMessenger(!showMessenger)} className={cx('btn__messager')}>
+                    <img src="https://book.local2/public/images/logo.webp" alt="" />
+                    <span>Chat</span>
+                </div>
             </div>
         </div>
     );

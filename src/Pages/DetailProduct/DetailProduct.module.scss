@@ -384,3 +384,36 @@
     border-radius: 10px;
     margin: 0px auto;
 }
+
+.messager {
+    height: 400px;
+    width: 400px;
+    position: fixed;
+    right: 40px;
+    bottom: 24px;
+}
+
+.btn__messager {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px 0px;
+    z-index: 999;
+    border-radius: 12px;
+    background: linear-gradient(0deg, rgb(10, 104, 255), rgb(10, 104, 255)),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+    bottom: 24px;
+    right: 40px;
+    opacity: 1;
+    padding: 8px;
+    visibility: visible;
+    img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.btn__messager:hover {
+    cursor: pointer;
+}

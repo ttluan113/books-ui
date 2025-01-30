@@ -131,3 +131,10 @@ export const requestGetNotify = async () => {
     const res = await request.get('/api/notify');
     return res.data;
 };
+
+/// feedback
+
+export const requestAddFeedback = async (data) => {
+    const res = await request.post('/api/add-feedback', data);
+    return res.data;
+};

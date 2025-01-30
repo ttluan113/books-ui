@@ -9,10 +9,14 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 import imgEmptyOrder from '../../../../../assets/empty-order.png';
+import ModalFeedback from './modal/modalFeedback';
 
 const cx = classNames.bind(styles);
 function OrderProcessing({ params }) {
     const [dataOrder, setDataOrder] = useState([]);
+    const [showModalFeedback, setShowModalFeedback] = useState(false);
+    const [nameProduct, setNameProduct] = useState('');
+    const [idOrder, setIdOrder] = useState('');
 
     const navigate = useNavigate();
 
@@ -34,6 +38,11 @@ function OrderProcessing({ params }) {
         } catch (error) {
             toast.error(error.response.data.message);
         }
+    };
+
+    const onModalFeedback = (name) => {
+        setShowModalFeedback(true);
+        setNameProduct(name);
     };
 
     return (
@@ -74,8 +83,29 @@ function OrderProcessing({ params }) {
                             </Button>
                         </div>
                     )}
+
+                    {['delivered'].includes(params) && (
+                        <div className={cx('item__btn')}>
+                            <Button
+                                onClick={() => {
+                                    onModalFeedback(item.name);
+                                    // setIdOrder(item.products.map((product) => product.productId));
+                                    setIdOrder(item.products[0].productId);
+                                }}
+                                variant="contained"
+                            >
+                                Đánh giá sản phẩm
+                            </Button>
+                        </div>
+                    )}
                 </div>
             ))}
+            <ModalFeedback
+                open={showModalFeedback}
+                setOpen={setShowModalFeedback}
+                nameProduct={nameProduct}
+                idOrder={idOrder}
+            />
         </div>
     );
 }
