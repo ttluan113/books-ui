@@ -1,10 +1,12 @@
 import classNames from 'classnames/bind';
 import styles from './Message.module.scss';
+import { requestGetMessage } from '../../../../../config/config';
 
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
+
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -38,6 +40,17 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 function Message() {
+    const [dataMessage, setDataMessage] = useState([]);
+    const [idUserMessages, setIdUserMessages] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await requestGetMessage();
+            setDataMessage(res);
+        };
+        fetchData();
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('slide__bar')}>
@@ -45,80 +58,23 @@ function Message() {
 
                 <div className={cx('list__user')}>
                     <ul>
-                        <li id={cx('active')}>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
+                        {dataMessage.map((user) => (
+                            <li
+                                onClick={() => setIdUserMessages(user._id)}
+                                key={user._id}
+                                id={cx(idUserMessages == user._id && 'active')}
                             >
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </StyledBadge>
+                                <StyledBadge
+                                    overlap="circular"
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    variant="dot"
+                                >
+                                    <Avatar alt={user.fullName} src="/static/images/avatar/1.jpg" />
+                                </StyledBadge>
 
-                            <div>
-                                <h4>Trần Trọng Luân</h4>
-                                <p>Chương trình với L2 Team</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </StyledBadge>
-
-                            <div>
-                                <h4>Trần Trọng Luân</h4>
-                                <p>Chương trình với L2 Team</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </StyledBadge>
-
-                            <div>
-                                <h4>Trần Trọng Luân</h4>
-                                <p>Chương trình với L2 Team</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </StyledBadge>
-
-                            <div>
-                                <h4>Trần Trọng Luân</h4>
-                                <p>Chương trình với L2 Team</p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </StyledBadge>
-
-                            <div>
-                                <h4>Trần Trọng Luân</h4>
-                                <p>Chương trình với L2 Team</p>
-                            </div>
-                        </li>
+                                <h4>{user.fullName}</h4>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>

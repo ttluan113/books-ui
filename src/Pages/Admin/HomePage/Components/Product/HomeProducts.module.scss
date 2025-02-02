@@ -1,0 +1,16 @@
+#img__product {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.header__home__page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0px;
+    h4 {
+        font-size: 20px;
+    }
+}

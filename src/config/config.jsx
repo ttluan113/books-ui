@@ -54,6 +54,18 @@ export const requestGetProduct = async (id) => {
     return res.data;
 };
 
+//// category
+
+export const requestAddCategory = async (data) => {
+    const res = await request.post('/api/add-category', data);
+    return res.data;
+};
+
+export const requestGetCategory = async (nameCategory) => {
+    const res = await request.get('/api/category', { params: { nameCategory } });
+    return res.data;
+};
+
 /// carts
 
 export const requestAddCart = async (data) => {
@@ -132,9 +144,26 @@ export const requestGetNotify = async () => {
     return res.data;
 };
 
+export const requestReadAllNotify = async () => {
+    const res = await request.post('/api/read-notify');
+    return res.data;
+};
+
 /// feedback
 
 export const requestAddFeedback = async (data) => {
     const res = await request.post('/api/add-feedback', data);
+    return res.data;
+};
+
+/// messager
+
+export const requestCreateMessage = async (valueMessage) => {
+    const res = await request.post('/api/create-message', { valueMessage });
+    return res.data;
+};
+
+export const requestGetMessage = async () => {
+    const res = await request.get('/api/messages');
     return res.data;
 };

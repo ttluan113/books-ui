@@ -3,6 +3,7 @@ import styles from './AddProduct.module.scss';
 
 import TextField from '@mui/material/TextField';
 import Slider from 'react-slick';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import { Editor } from '@tinymce/tinymce-react';
 
@@ -12,9 +13,10 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { requestAddProduct } from '../../../../../config/config';
+import { requestAddCategory, requestAddProduct, requestGetCategory } from '../../../../../config/config';
+import useDebounce from '../../../../../hooks/useDebounce';
 
 const cx = classNames.bind(styles);
 
@@ -52,9 +54,24 @@ function AddProduct() {
     const [publishingHouse, setPublishingHouse] = useState('');
     const [previewImages, setPreviewImages] = useState([]);
 
+    const [valueCategory, setValueCategory] = useState('');
+    const [selectCategory, setSelectCategory] = useState('');
+    const [dataCategory, setDataCategory] = useState([]);
+
+    const valueSearchCategory = useDebounce(valueCategory, 1000);
+
     const handleChange = (event) => {
         setType(event.target.value);
     };
+
+    const fetchData = async () => {
+        const res = await requestGetCategory(valueSearchCategory);
+        setDataCategory(res);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [valueSearchCategory]);
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
@@ -78,6 +95,7 @@ function AddProduct() {
         formData.append('price', price);
         formData.append('quantity', quantity);
         formData.append('description', description);
+        formData.append('category', selectCategory);
         images.forEach((image) => {
             formData.append('images', image);
         });
@@ -104,10 +122,21 @@ function AddProduct() {
         }
     };
 
+    const handleAddCategory = async () => {
+        try {
+            const res = await requestAddCategory({ valueCategory });
+            toast.success(res.message);
+            setValueCategory('');
+            fetchData();
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <ToastContainer />
-            <h4>Thêm Sản Phẩm</h4>
+
             <div className={cx('form__add-product')}>
                 <div>
                     <div className={cx('form__input')}>
@@ -306,7 +335,51 @@ function AddProduct() {
                             onChange={(e) => setPublishingHouse(e.target.value)}
                             value={publishingHouse}
                         />
+
+                        <Autocomplete
+                            disablePortal
+                            options={dataCategory?.map((category) => category.nameCategory) || []}
+                            value={selectCategory}
+                            onChange={(event, newValue) => {
+                                setSelectCategory(newValue);
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    onChange={(event, newValue) => setValueCategory(newValue)}
+                                    label="Danh mục"
+                                />
+                            )}
+                        />
+
+                        <div className={cx('form__category')}>
+                            <TextField
+                                sx={{
+                                    width: '100%',
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: '#fff', // Màu viền mặc định
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: '#fff', // Màu viền khi hover
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#3f51b5', // Màu viền khi focus
+                                        },
+                                    },
+                                }}
+                                id="outlined-basic"
+                                label="Danh Mục Mới"
+                                variant="outlined"
+                                onChange={(e) => setValueCategory(e.target.value)}
+                                value={valueCategory}
+                            />
+                        </div>
+                        <Button onClick={handleAddCategory} variant="contained">
+                            Thêm Danh Mục
+                        </Button>
                     </div>
+
                     <div className={cx('form__editor')}>
                         <Editor
                             apiKey="hfm046cu8943idr5fja0r5l2vzk9l8vkj5cp3hx2ka26l84x"

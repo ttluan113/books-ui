@@ -14,6 +14,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import Comments from './Components/Comments/Comments';
 import TimeAgo from '../../utils/TimeAgo';
 import Messenger from './Components/Messenger/Messenger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMessage } from '@fortawesome/free-regular-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +37,7 @@ function DetailProduct() {
     const [product, setProduct] = useState({});
     const [sumPrice, setSumPrice] = useState(0);
 
-    const [showMessenger, setShowMessenger] = useState(false);
+    const [showMessenger, setShowMessenger] = useState(true);
 
     const { id } = useParams();
     const { mode } = useTheme();
@@ -257,7 +259,7 @@ function DetailProduct() {
                     </div>
                 )}
                 <div onClick={() => setShowMessenger(!showMessenger)} className={cx('btn__messager')}>
-                    <img src="https://book.local2/public/images/logo.webp" alt="" />
+                    <FontAwesomeIcon id={cx('icons')} icon={faMessage} />
                     <span>Chat</span>
                 </div>
             </div>

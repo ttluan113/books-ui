@@ -18,7 +18,7 @@ import Logout from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import { useEffect, useState } from 'react';
-import { requestGetNotify, requestLogout } from '../../config/config';
+import { requestGetNotify, requestLogout, requestReadAllNotify } from '../../config/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon, faSun } from '@fortawesome/free-regular-svg-icons';
 
@@ -58,17 +58,27 @@ function Header() {
         navigate(path);
     };
 
+    const fetchData = async () => {
+        const res = await requestGetNotify();
+        setDataNotify(res);
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            const res = await requestGetNotify();
-            setDataNotify(res);
-        };
         fetchData();
     }, [dataUser.id !== '']);
 
     useEffect(() => {
         setDataNotify([...dataNotify, newNotify]);
     }, [newNotify]);
+
+    const handleReadAllNotify = async () => {
+        try {
+            await requestReadAllNotify();
+            fetchData();
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    };
 
     const [showNotify, setShowNotify] = useState(false);
 
@@ -98,7 +108,7 @@ function Header() {
                         </Link>
                         <div className={cx('notify')}>
                             <div className={cx(mode === 'dark' ? 'number__notify__dark' : 'number__notify')}>
-                                {dataNotify.length}
+                                {dataNotify.filter((notify) => !notify.isRead).length}
                             </div>
                             <button onClick={() => setShowNotify(!showNotify)}>
                                 <Tooltip title={!showNotify && 'Thông báo'}>
@@ -113,29 +123,33 @@ function Header() {
                                 <div className={cx(mode === 'dark' ? 'result__notify__dark' : 'result__notify')}>
                                     <div className={cx('result__notify__header')}>
                                         <h3>Thông Báo</h3>
-                                        <span>Đánh dấu tất cả đã đọc</span>
+                                        <span onClick={handleReadAllNotify}>Đánh dấu tất cả đã đọc</span>
                                     </div>
                                     <div>
                                         <ul>
-                                            {dataNotify.map((notify) => (
-                                                <li
-                                                    key={notify._id}
-                                                    onClick={() => onNavigateProduct(`/product/${notify.productId}`)}
-                                                    id={cx(notify.isRead ? '' : 'no__read')}
-                                                >
-                                                    <img
-                                                        src="http://localhost:5001/uploads/avatars/1737826973701.webp"
-                                                        alt=""
-                                                    />
-                                                    <div className={cx('result__notify__info')}>
-                                                        <h4>{notify.fullName}</h4>
-                                                        <p>{notify.content}</p>
-                                                        <span>
-                                                            <TimeAgo timestamp={notify.createdAt} />
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                            ))}
+                                            {dataNotify
+                                                .sort((a, b) => b.createdAt - a.createdAt)
+                                                .map((notify) => (
+                                                    <li
+                                                        key={notify._id}
+                                                        onClick={() =>
+                                                            onNavigateProduct(`/product/${notify.productId}`)
+                                                        }
+                                                        id={cx(notify.isRead ? '' : 'no__read')}
+                                                    >
+                                                        <img
+                                                            src="http://localhost:5001/uploads/avatars/1737826973701.webp"
+                                                            alt=""
+                                                        />
+                                                        <div className={cx('result__notify__info')}>
+                                                            <h4>{notify.fullName}</h4>
+                                                            <p>{notify.content}</p>
+                                                            <span>
+                                                                <TimeAgo timestamp={notify.createdAt} />
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                ))}
                                         </ul>
                                     </div>
                                 </div>

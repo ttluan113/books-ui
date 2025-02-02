@@ -123,6 +123,21 @@
     }
 }
 
+.result__notify__header {
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    span:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
 .notify {
     position: relative;
     button {
@@ -200,7 +215,6 @@
         ul {
             display: flex;
             flex-direction: column;
-            padding-top: 10px;
 
             li {
                 list-style: none;
@@ -270,6 +284,22 @@
 }
 
 .number__notify {
+    position: absolute;
+    top: -5px;
+    right: -4px;
+    background-color: #ff424e;
+    font-size: 13px;
+    font-weight: 500;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.number__notify__dark {
     position: absolute;
     top: -5px;
     right: -4px;

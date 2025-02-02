@@ -386,11 +386,13 @@
 }
 
 .messager {
-    height: 400px;
-    width: 400px;
+    width: 800px;
+    height: 90vh;
     position: fixed;
     right: 40px;
     bottom: 24px;
+    color: #fff;
+    font-weight: 600;
 }
 
 .btn__messager {
@@ -408,9 +410,10 @@
     opacity: 1;
     padding: 8px;
     visibility: visible;
-    img {
-        width: 50px;
-        height: 50px;
+    gap: 10px;
+    #icons {
+        width: 30px;
+        height: 30px;
     }
 }
 
