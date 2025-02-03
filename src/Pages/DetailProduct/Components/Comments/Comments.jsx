@@ -113,7 +113,7 @@ function Comments({ productId }) {
                             <div className={cx('form__sub__comments')}>
                                 {comment?.subComments?.length > 0 &&
                                     comment?.subComments?.map((subComment) => (
-                                        <div className={cx('inner__sub__comment')}>
+                                        <div key={subComment._id} className={cx('inner__sub__comment')}>
                                             <div className={cx('info__user__sub')}>
                                                 <Avatar
                                                     sx={{ width: '35px', height: '35px' }}

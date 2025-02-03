@@ -9,7 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
-import { requestAddDiscount } from '../../../../../config/config';
+import { requestAddDiscount } from '../../../../../../config/config';
 
 const cx = classNames.bind(styles);
 
@@ -60,7 +60,6 @@ function AddDisCount() {
         <div className={cx('wrapper')}>
             <ToastContainer />
             <main>
-                <h4>Khuyến mãi</h4>
                 <div className={cx('form')}>
                     <TextField
                         sx={{

@@ -385,16 +385,6 @@
     margin: 0px auto;
 }
 
-.messager {
-    width: 800px;
-    height: 90vh;
-    position: fixed;
-    right: 40px;
-    bottom: 24px;
-    color: #fff;
-    font-weight: 600;
-}
-
 .btn__messager {
     position: fixed;
     display: flex;
@@ -419,4 +409,8 @@
 
 .btn__messager:hover {
     cursor: pointer;
+}
+
+.messager {
+    position: relative;
 }

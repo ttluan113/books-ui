@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './HomeProducts.module.scss';
-import AddProduct from './AddProduct';
+import AddProduct from './AddProduct/AddProduct';
 
 import { useState, useEffect } from 'react';
 import { requestGetProducts } from '../../../../../config/config';
@@ -14,15 +14,19 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 import Button from '@mui/material/Button';
+import ModalDeleteProduct from './ModalDelete/ModalDelete';
 
 const cx = classNames.bind(styles);
 
-function createData(img, name, price, quantity, category) {
-    return { img, name, price, quantity, category };
+function createData(id, img, name, price, quantity, category, images, options, description) {
+    return { id, img, name, price, quantity, category, images, options, description };
 }
 
 function HomeProducts() {
     const [dataProducts, setDataProducts] = useState([]);
+
+    const [open, setOpen] = useState(false);
+    const [dataOneProduct, setDataOneProduct] = useState({});
 
     const [type, setType] = useState(0);
 
@@ -33,18 +37,34 @@ function HomeProducts() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [open, type]);
 
     const rows = dataProducts.map((product) => {
-        return createData(product.images[0], product.name, product.price, product.quantity, product.category);
+        return createData(
+            product._id,
+            product.images[0],
+            product.name,
+            product.price,
+            product.quantity,
+            product.category,
+            product.images,
+            product.options,
+            product.description,
+        );
     });
 
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header__home__page')}>
                 <h4>Quản lý sản phẩm</h4>
-                <Button onClick={() => setType(type == 0 ? 1 : 0)} variant="contained">
-                    {type === 0 ? ' Thêm sản phẩm' : 'Quay lại'}
+                <Button
+                    onClick={() => {
+                        setType(type == 0 ? 1 : 0);
+                        type === 1 ? setDataOneProduct({}) : setDataProducts([]);
+                    }}
+                    variant="contained"
+                >
+                    {type === 0 ? 'Thêm sản phẩm' : 'Quay lại'}
                 </Button>
             </div>
             <div>
@@ -88,11 +108,23 @@ function HomeProducts() {
                                                     gap: '20px',
                                                 }}
                                             >
-                                                <Button variant="contained">Sửa</Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        setDataOneProduct(row);
+                                                        setType(1);
+                                                    }}
+                                                    variant="contained"
+                                                >
+                                                    Sửa
+                                                </Button>
                                                 <Button
                                                     color="error"
                                                     style={{ marginBottom: '13px' }}
                                                     variant="contained"
+                                                    onClick={() => {
+                                                        setOpen(true);
+                                                        setDataOneProduct(row);
+                                                    }}
                                                 >
                                                     Xoá
                                                 </Button>
@@ -104,11 +136,12 @@ function HomeProducts() {
                         </TableContainer>
                     </div>
                 ) : type === 1 ? (
-                    <AddProduct />
+                    <AddProduct dataOneProduct={dataOneProduct} />
                 ) : (
                     <></>
                 )}
             </div>
+            <ModalDeleteProduct open={open} setOpen={setOpen} dataOneProduct={dataOneProduct} />
         </div>
     );
 }

@@ -5,7 +5,7 @@ import Rating from '@mui/material/Rating';
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { requestAddCart, requestGetProduct } from '../../config/config';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../store/Provider';
@@ -26,6 +26,7 @@ const settings = {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
 };
 
 function DetailProduct() {
@@ -34,30 +35,37 @@ function DetailProduct() {
     const [dataFeedback, setDataFeedback] = useState([]);
     const [ratingProduct, setRatingProduct] = useState(0);
 
+    const [idProduct, setIdProduct] = useState('');
+
     const [product, setProduct] = useState({});
     const [sumPrice, setSumPrice] = useState(0);
 
-    const [showMessenger, setShowMessenger] = useState(true);
+    const [showMessenger, setShowMessenger] = useState(false);
 
     const { id } = useParams();
     const { mode } = useTheme();
 
+    const navigate = useNavigate();
+
     const fetchData = async () => {
-        const res = await requestGetProduct(id);
+        const res = await requestGetProduct(idProduct || id);
         setProduct(res.product);
         setBrandBooks(res.brandProducts);
         setDataFeedback(res.feedbackUser);
 
         const totalRating = res.feedbackUser.reduce((total, item) => total + item.rating, 0);
         const averageRating = totalRating / res.feedbackUser.length;
+
         setRatingProduct(averageRating.toFixed(1));
+
+        setIdProduct(id);
 
         document.title = res.product.name;
     };
 
     useEffect(() => {
         fetchData();
-    }, [id]);
+    }, [idProduct, id]);
 
     const onIncreaseQuantity = () => {
         setQuantity(quantity + 1);
@@ -126,7 +134,13 @@ function DetailProduct() {
                             <div className={cx('list-product-related')}>
                                 <ul>
                                     {brandBooks.slice(0, 5).map((brandBook, index) => (
-                                        <li key={index} onClick={() => setId(brandBook._id)}>
+                                        <li
+                                            key={index}
+                                            onClick={() => {
+                                                setIdProduct(brandBook._id);
+                                                navigate(`/product/${brandBook._id}`);
+                                            }}
+                                        >
                                             <img
                                                 src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${
                                                     brandBook.images[0]
@@ -148,7 +162,7 @@ function DetailProduct() {
                         <div className={cx('info')}>
                             <h1>{product?.name}</h1>
                             <Box className={cx('rating')}>
-                                <span>{ratingProduct}</span>
+                                <span>{ratingProduct || 0}</span>
                                 <Rating name="read-only" value={5} readOnly size="small" />
                                 <p>({dataFeedback?.length})</p>
                                 <span className={cx('sold')}>| Đã Bán {product?.countBuy}</span>
@@ -253,11 +267,7 @@ function DetailProduct() {
             </div>
 
             <div className={cx('messager')}>
-                {showMessenger && (
-                    <div className={cx('form__messager')}>
-                        <Messenger />
-                    </div>
-                )}
+                {showMessenger && <Messenger setShow={setShowMessenger} />}
                 <div onClick={() => setShowMessenger(!showMessenger)} className={cx('btn__messager')}>
                     <FontAwesomeIcon id={cx('icons')} icon={faMessage} />
                     <span>Chat</span>

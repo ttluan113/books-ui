@@ -15,8 +15,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { requestAddCategory, requestAddProduct, requestGetCategory } from '../../../../../config/config';
-import useDebounce from '../../../../../hooks/useDebounce';
+import {
+    requestAddCategory,
+    requestAddProduct,
+    requestEditProduct,
+    requestGetCategory,
+} from '../../../../../../config/config';
+import useDebounce from '../../../../../../hooks/useDebounce';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +45,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-function AddProduct() {
+function AddProduct({ dataOneProduct }) {
     const [images, setImages] = useState([]);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -79,6 +84,25 @@ function AddProduct() {
         const previewUrls = files.map((file) => URL.createObjectURL(file));
         setPreviewImages(previewUrls);
     };
+
+    console.log(dataOneProduct);
+
+    // useEffect(() => {
+    //     if (dataOneProduct) {
+    //         setName(dataOneProduct?.name);
+    //         setPrice(dataOneProduct?.price);
+    //         setQuantity(dataOneProduct?.quantity);
+    //         setDescription(dataOneProduct?.description);
+    //         setCompany(dataOneProduct?.options?.company);
+    //         setPublicationDate(dataOneProduct?.options?.publicationDate);
+    //         setType(dataOneProduct?.options?.type);
+    //         setSize(dataOneProduct?.options?.size);
+    //         setPage(dataOneProduct?.options?.page);
+    //         setPublishingHouse(dataOneProduct?.options?.publishingHouse);
+    //         setSelectCategory(dataOneProduct?.category);
+    //         setPreviewImages(dataOneProduct?.images);
+    //     }
+    // }, [dataOneProduct]);
 
     const handleAddProduct = async () => {
         const options = {
@@ -389,7 +413,6 @@ function AddProduct() {
                                 toolbar:
                                     'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
                             }}
-                            initialValue="Mô tả sản phẩm"
                             onEditorChange={(content, editor) => {
                                 setDescription(content);
                             }}
@@ -400,7 +423,7 @@ function AddProduct() {
 
                 <div className={cx('form__slider')}>
                     <Slider {...settings}>
-                        {previewImages.map((image, index) => (
+                        {previewImages?.map((image, index) => (
                             <div key={index}>
                                 <img src={image} alt={`Slide ${index + 1}`} />
                             </div>

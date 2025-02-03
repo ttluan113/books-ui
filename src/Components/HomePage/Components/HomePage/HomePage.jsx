@@ -1,54 +1,73 @@
 import classNames from 'classnames/bind';
 import styles from './HomePage.module.scss';
 
-import Slider from 'react-slick';
 import HomeCardBody from './Components/HomeCardBody/HomeCardBody';
 import { useTheme } from '../../../../store/Provider';
+
+import { FastAverageColor } from 'fast-average-color';
+
+// import banner1 from '../../../../assets/book1.png';
+import banner1 from '../../../../assets/1.webp';
+import banner2 from '../../../../assets/3.webp';
+
+import { useEffect, useRef, useState } from 'react';
+import { requestGetProducts } from '../../../../config/config';
+
+import Slider from 'react-slick';
 
 const cx = classNames.bind(styles);
 
 const settings = {
     dots: false,
+    arrows: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false,
+    autoplay: true,
 };
 
 function HomePage({ products }) {
     const { mode } = useTheme();
+    const bannerRef = useRef(null);
+
+    useEffect(() => {
+        const fac = new FastAverageColor();
+        const img = new Image();
+        img.src = banner2;
+        img.crossOrigin = 'anonymous'; // Đảm bảo có thể đọc ảnh từ nguồn ngoài
+
+        img.onload = () => {
+            const color = fac.getColor(img);
+            if (bannerRef.current) {
+                bannerRef.current.style.background = `linear-gradient(-90deg, ${color.hex}, rgba(0, 0, 0, 0.1))`;
+            }
+        };
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
-            <Slider className={cx(mode === 'dark' ? 'slider__dark' : 'slider')} {...settings}>
-                <div className={cx('slide')}>
-                    <img
-                        src="https://salt.tikicdn.com/cache/w750/ts/tikimsp/cf/29/6b/a7159437f6c399d2101af4ce07244707.png.webp"
-                        alt=""
-                    />
+            <div ref={bannerRef} className={cx('main__banner')}>
+                <div className={cx('main__banner__content')}>
+                    <div className={cx('main__banner__content__info')}>
+                        <ul>
+                            <li>123</li>
+                            <li>Nhà Xuất Bản Công Thương</li>
+                            <li>Bìa mềm</li>
+                            <li>1980 Books</li>
+                            <li>13 x 20,5 cm</li>
+                            <li>60+ đã bán</li>
+                        </ul>
+                        <img src={banner2} alt="" />
+                    </div>
                 </div>
-                <div className={cx('slide')}>
-                    <img
-                        src="https://salt.tikicdn.com/cache/w750/ts/tikimsp/1b/5f/d2/2927a3714421257a49322375d4b7769e.png.webp"
-                        alt=""
-                    />
-                </div>
-                <div className={cx('slide')}>
-                    <img
-                        src="https://salt.tikicdn.com/cache/w750/ts/tikimsp/5a/75/0d/fa2fe7a46990ec527a6ba3b2875f1957.png.webp"
-                        alt=""
-                    />
-                </div>
-                <div className={cx('slide')}>
-                    <img
-                        src="https://salt.tikicdn.com/cache/w750/ts/tikimsp/c4/0b/8e/d78eb26956e0fe454ffebe2e2df9b830.png.webp"
-                        alt=""
-                    />
-                </div>
-            </Slider>
+            </div>
             <div className={cx(mode === 'dark' ? 'home-card-body__dark' : 'home-card-body')}>
-                <HomeCardBody products={products} />
+                {products && products.length > 0 ? (
+                    <HomeCardBody products={products} />
+                ) : (
+                    <p className={cx('no-products')}>Không có sản phẩm nào!</p>
+                )}
             </div>
         </div>
     );

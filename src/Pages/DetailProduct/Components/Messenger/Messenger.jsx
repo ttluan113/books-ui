@@ -5,13 +5,13 @@ import imgAi from '../../../../assets/imgAi.png';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { requestCreateMessage, requestGetMessage } from '../../../../config/config';
+import { requestCreateMessage, requestGetMessages, requestGetMessage } from '../../../../config/config';
 import { useStore } from '../../../../hooks/useStore';
 
 const cx = classNames.bind(styles);
 
-function Messenger() {
-    const { dataUser } = useStore();
+function Messenger({ setShow }) {
+    const { dataUser, newMessage } = useStore();
 
     const [dataMessage, setDataMessage] = useState([]);
 
@@ -20,7 +20,11 @@ function Messenger() {
     const handleCreateMessage = async () => {
         try {
             if (!valueMessage) return;
-            const res = await requestCreateMessage(valueMessage);
+            const data = {
+                valueMessage,
+                receiverId: null,
+            };
+            const res = await requestCreateMessage(data);
             setDataMessage([...dataMessage, res]);
             setValueMessage('');
         } catch (error) {
@@ -30,11 +34,17 @@ function Messenger() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await requestGetMessage();
+            const res = await requestGetMessages();
             setDataMessage(res);
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (newMessage) {
+            setDataMessage([...dataMessage, newMessage]);
+        }
+    }, [newMessage]);
 
     return (
         <div className={cx('wrapper')}>
@@ -45,7 +55,7 @@ function Messenger() {
                 </div>
                 <div className={cx('header__right')}>
                     <button>
-                        <FontAwesomeIcon icon={faXmark} />
+                        <FontAwesomeIcon onClick={() => setShow(false)} icon={faXmark} />
                     </button>
                 </div>
             </header>

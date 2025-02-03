@@ -12,6 +12,8 @@ export function Provider({ children }) {
     const [dataUser, setDataUser] = useState({});
     const [socket, setSocket] = useState(null);
     const [newNotify, setNewNotify] = useState({});
+    const [newMessage, setNewMessage] = useState({});
+    const [newUserMessage, setNewUserMessage] = useState({});
 
     const token = document.cookie;
 
@@ -39,14 +41,26 @@ export function Provider({ children }) {
 
         socket.on('notifyComment', (data) => {
             setNewNotify(data);
-            console.log(data);
         });
+
+        socket.on('newMessage', (data) => {
+            setNewMessage(data || {});
+        });
+
+        socket.on('newUserMessage', (data) => {
+            setNewUserMessage(data);
+        });
+
         return () => {
             socket.disconnect();
         };
-    }, [socket, newNotify]);
+    }, [socket, newNotify, newMessage, newUserMessage]);
 
-    return <Context.Provider value={{ dataUser, socket, newNotify }}>{children}</Context.Provider>;
+    return (
+        <Context.Provider value={{ dataUser, socket, newNotify, newMessage, newUserMessage }}>
+            {children}
+        </Context.Provider>
+    );
 }
 
 const ThemeContext = createContext();

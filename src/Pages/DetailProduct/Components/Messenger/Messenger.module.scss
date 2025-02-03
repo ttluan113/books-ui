@@ -1,5 +1,5 @@
 .wrapper {
-    width: 90%;
+    width: 30%;
     height: 90vh;
     background-color: #fff;
     border-radius: 10px;
@@ -7,6 +7,9 @@
     grid-template-rows: 50px 1fr;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 7%;
+    right: 7%;
 }
 
 .header {

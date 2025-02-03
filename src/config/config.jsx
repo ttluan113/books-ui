@@ -54,6 +54,16 @@ export const requestGetProduct = async (id) => {
     return res.data;
 };
 
+export const requestDeleteProduct = async (id) => {
+    const res = await request.delete('/api/delete-product', { params: { id } });
+    return res.data;
+};
+
+export const requestEditProduct = async (data) => {
+    const res = await request.post('/api/edit-product', { data });
+    return res.data;
+};
+
 //// category
 
 export const requestAddCategory = async (data) => {
@@ -96,6 +106,16 @@ export const requestAddDiscount = async (data) => {
 
 export const requestAddUserDiscount = async (idDiscount) => {
     const res = await request.post('/api/add-user-discount', { idDiscount });
+    return res.data;
+};
+
+export const requestGetDiscount = async () => {
+    const res = await request.get('/api/discount');
+    return res.data;
+};
+
+export const requestDeleteDiscount = async (id) => {
+    const res = await request.delete('/api/delete-discount', { params: { idDiscount: id } });
     return res.data;
 };
 
@@ -159,11 +179,16 @@ export const requestAddFeedback = async (data) => {
 /// messager
 
 export const requestCreateMessage = async (valueMessage) => {
-    const res = await request.post('/api/create-message', { valueMessage });
+    const res = await request.post('/api/create-message', { data: valueMessage });
     return res.data;
 };
 
-export const requestGetMessage = async () => {
+export const requestGetMessages = async () => {
     const res = await request.get('/api/messages');
+    return res.data;
+};
+
+export const requestGetMessage = async (receiverId) => {
+    const res = await request.get('/api/message', { params: { receiverId } });
     return res.data;
 };

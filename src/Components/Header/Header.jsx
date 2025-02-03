@@ -60,14 +60,17 @@ function Header() {
 
     const fetchData = async () => {
         const res = await requestGetNotify();
-        setDataNotify(res);
+        setDataNotify(res || []);
     };
 
     useEffect(() => {
-        fetchData();
-    }, [dataUser.id !== '']);
+        if (dataUser.id) {
+            fetchData();
+        }
+    }, [dataUser.id]);
 
     useEffect(() => {
+        if (!dataNotify.includes(newNotify)) return;
         setDataNotify([...dataNotify, newNotify]);
     }, [newNotify]);
 

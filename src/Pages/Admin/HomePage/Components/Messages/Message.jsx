@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './Message.module.scss';
-import { requestGetMessage } from '../../../../../config/config';
+import { requestGetMessages, requestGetMessage, requestCreateMessage } from '../../../../../config/config';
+import { useStore } from '../../../../../hooks/useStore';
+import TimeAgo from '../../../../../utils/TimeAgo';
 
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
@@ -41,15 +43,62 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Message() {
     const [dataMessage, setDataMessage] = useState([]);
+    const [listMessage, setListMessage] = useState([]);
     const [idUserMessages, setIdUserMessages] = useState('');
+    const [infoUserMessage, setInfoUserMessage] = useState({});
+
+    const [valueMessage, setValueMessage] = useState('');
+
+    const { dataUser, newMessage, newUserMessage } = useStore();
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await requestGetMessage();
+            const res = await requestGetMessages();
             setDataMessage(res);
+            if (res.length > 0) {
+                setIdUserMessages(res.map((user) => user._id)[0]);
+            }
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await requestGetMessage(idUserMessages);
+            setListMessage(res);
+            setInfoUserMessage(res[0]);
+        };
+        if (idUserMessages === '') return;
+        fetchData();
+    }, [idUserMessages]);
+
+    useEffect(() => {
+        if (newUserMessage) {
+            setDataMessage([...dataMessage, newUserMessage]);
+        }
+    }, [newUserMessage]);
+
+    const handleCreateMessage = async () => {
+        try {
+            if (!valueMessage || !idUserMessages) return;
+            const data = {
+                valueMessage,
+                receiverId: idUserMessages,
+            };
+
+            const res = await requestCreateMessage(data);
+            setListMessage([...listMessage, res]);
+            setValueMessage('');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (newMessage) {
+            setListMessage([...listMessage, newMessage]);
+        }
+    }, [newMessage]);
 
     return (
         <div className={cx('wrapper')}>
@@ -69,99 +118,65 @@ function Message() {
                                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                     variant="dot"
                                 >
-                                    <Avatar alt={user.fullName} src="/static/images/avatar/1.jpg" />
+                                    <Avatar
+                                        alt={user?.fullName}
+                                        src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${user.avatar}`}
+                                    />
                                 </StyledBadge>
 
-                                <h4>{user.fullName}</h4>
+                                <h4>{user?.fullName}</h4>
                             </li>
                         ))}
                     </ul>
                 </div>
             </div>
-            <div className={cx('home__page')}>
-                <div className={cx('header__home__page')}>
-                    <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        variant="dot"
-                    >
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                    </StyledBadge>
+            {idUserMessages && (
+                <div className={cx('home__page')}>
+                    <div className={cx('header__home__page')}>
+                        <StyledBadge
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                        >
+                            <Avatar
+                                alt={infoUserMessage?.fullName}
+                                src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${infoUserMessage?.avatar}`}
+                            />
+                        </StyledBadge>
 
-                    <h4>Trần Trọng Luân</h4>
-                </div>
-                <div className={cx('main__home__page')}>
-                    <div className={cx('list__message')}>
-                        <div className={cx('message__receive')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__receive')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__receive')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__receive')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__receive')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
-                        </div>
-
-                        <div className={cx('message__sender')}>
-                            <p>Chương trình với L2 Team</p>
-                            <span>12:00</span>
+                        <h4>{infoUserMessage?.fullName}</h4>
+                    </div>
+                    <div className={cx('main__home__page')}>
+                        <div className={cx('list__message')}>
+                            {listMessage.map((msg) => (
+                                <div
+                                    id={msg.senderId === dataUser._id && cx('bgr__msg')}
+                                    className={cx('message__receive', { bgr__msg: msg.senderId === dataUser._id })}
+                                    key={msg._id}
+                                >
+                                    <p>{msg.content}</p>
+                                    <span>
+                                        <TimeAgo createdAt={msg.createdAt} />
+                                    </span>
+                                </div>
+                            ))}
                         </div>
                     </div>
+                    <div className={cx('footer__home__page')}>
+                        <input
+                            type="text"
+                            placeholder="Nhập tin nhắn..."
+                            onChange={(e) => setValueMessage(e.target.value)}
+                            value={valueMessage}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleCreateMessage();
+                                }
+                            }}
+                        />
+                    </div>
                 </div>
-                <div className={cx('footer__home__page')}>
-                    <input type="text" placeholder="Nhập tin nhắn..." />
-                </div>
-            </div>
+            )}
         </div>
     );
 }
