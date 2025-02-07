@@ -85,25 +85,6 @@ function AddProduct({ dataOneProduct }) {
         setPreviewImages(previewUrls);
     };
 
-    console.log(dataOneProduct);
-
-    // useEffect(() => {
-    //     if (dataOneProduct) {
-    //         setName(dataOneProduct?.name);
-    //         setPrice(dataOneProduct?.price);
-    //         setQuantity(dataOneProduct?.quantity);
-    //         setDescription(dataOneProduct?.description);
-    //         setCompany(dataOneProduct?.options?.company);
-    //         setPublicationDate(dataOneProduct?.options?.publicationDate);
-    //         setType(dataOneProduct?.options?.type);
-    //         setSize(dataOneProduct?.options?.size);
-    //         setPage(dataOneProduct?.options?.page);
-    //         setPublishingHouse(dataOneProduct?.options?.publishingHouse);
-    //         setSelectCategory(dataOneProduct?.category);
-    //         setPreviewImages(dataOneProduct?.images);
-    //     }
-    // }, [dataOneProduct]);
-
     const handleAddProduct = async () => {
         const options = {
             company,
@@ -375,33 +356,6 @@ function AddProduct({ dataOneProduct }) {
                                 />
                             )}
                         />
-
-                        <div className={cx('form__category')}>
-                            <TextField
-                                sx={{
-                                    width: '100%',
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: '#fff', // Màu viền mặc định
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: '#fff', // Màu viền khi hover
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#3f51b5', // Màu viền khi focus
-                                        },
-                                    },
-                                }}
-                                id="outlined-basic"
-                                label="Danh Mục Mới"
-                                variant="outlined"
-                                onChange={(e) => setValueCategory(e.target.value)}
-                                value={valueCategory}
-                            />
-                        </div>
-                        <Button onClick={handleAddCategory} variant="contained">
-                            Thêm Danh Mục
-                        </Button>
                     </div>
 
                     <div className={cx('form__editor')}>

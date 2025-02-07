@@ -37,6 +37,11 @@ export const requestEditUser = async (data) => {
     return res.data;
 };
 
+export const requestRefeshToken = async () => {
+    const res = await request.get('/api/refresh-token');
+    return res.data;
+};
+
 /// product
 
 export const requestAddProduct = async (data) => {
@@ -44,8 +49,10 @@ export const requestAddProduct = async (data) => {
     return res.data;
 };
 
-export const requestGetProducts = async () => {
-    const res = await request.get('/api/get-products');
+export const requestGetProducts = async ({ sortType, category, limit, page }) => {
+    const params = Object.fromEntries(Object.entries({ sortType, category, limit, page }).filter(([_, v]) => v));
+
+    const res = await request.get('/api/get-products', { params });
     return res.data;
 };
 
@@ -64,6 +71,11 @@ export const requestEditProduct = async (data) => {
     return res.data;
 };
 
+export const requestGetProductsTopBuy = async () => {
+    const res = await request.get('/api/product-top-buy');
+    return res.data;
+};
+
 //// category
 
 export const requestAddCategory = async (data) => {
@@ -72,7 +84,18 @@ export const requestAddCategory = async (data) => {
 };
 
 export const requestGetCategory = async (nameCategory) => {
-    const res = await request.get('/api/category', { params: { nameCategory } });
+    const params = Object.fromEntries(Object.entries({ nameCategory }).filter(([_, v]) => v));
+    const res = await request.get('/api/category', { params });
+    return res.data;
+};
+
+export const requestDeleteCategory = async (id) => {
+    const res = await request.delete('/api/delete-category', { params: { id } });
+    return res.data;
+};
+
+export const requestEditCategory = async (data) => {
+    const res = await request.post('/api/edit-category', { data });
     return res.data;
 };
 
@@ -192,3 +215,65 @@ export const requestGetMessage = async (receiverId) => {
     const res = await request.get('/api/message', { params: { receiverId } });
     return res.data;
 };
+
+/// discount product
+export const requestCreateDiscountProduct = async (data) => {
+    const res = await request.post('/api/create-discount-product', data);
+    return res.data;
+};
+
+export const requestGetDiscountProduct = async () => {
+    const res = await request.get('/api/get-discount-product');
+    return res.data;
+};
+
+let isRefreshing = false;
+let failedRequestsQueue = [];
+
+request.interceptors.response.use(
+    (response) => response, // Trả về nếu không có lỗi
+    async (error) => {
+        const originalRequest = error.config;
+
+        // Nếu lỗi 401 (Unauthorized) và request chưa từng thử refresh
+        if (error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            if (!isRefreshing) {
+                isRefreshing = true;
+
+                try {
+                    // Gửi yêu cầu refresh token
+                    const { data } = await request.get('/api/refresh-token');
+
+                    // Lưu token mới
+
+                    // Xử lý lại tất cả các request bị lỗi 401 trước đó
+                    failedRequestsQueue.forEach((req) => req.resolve(data.accessToken));
+                    failedRequestsQueue = [];
+                } catch (refreshError) {
+                    // Nếu refresh thất bại, đăng xuất
+                    failedRequestsQueue.forEach((req) => req.reject(refreshError));
+                    failedRequestsQueue = [];
+                    localStorage.clear();
+                    window.location.href = '/login'; // Chuyển về trang đăng nhập
+                } finally {
+                    isRefreshing = false;
+                }
+            }
+
+            // Trả về một Promise để retry request sau khi token mới được cập nhật
+            return new Promise((resolve, reject) => {
+                failedRequestsQueue.push({
+                    resolve: (token) => {
+                        originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                        resolve(API(originalRequest));
+                    },
+                    reject: (err) => reject(err),
+                });
+            });
+        }
+
+        return Promise.reject(error);
+    },
+);

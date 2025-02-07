@@ -9,9 +9,13 @@ import { toast, ToastContainer } from 'react-toastify';
 import TimeAgo from '../../../../utils/TimeAgo';
 import { useStore } from '../../../../hooks/useStore';
 
+import { useTheme } from '../../../../store/Provider';
+
 const cx = classNames.bind(styles);
 
 function Comments({ productId }) {
+    const { mode } = useTheme();
+
     const [showInput, setShowInput] = useState(false);
     const [dataComments, setDataComments] = useState([]);
     const [idCommentRoot, setIdCommentRoot] = useState('');
@@ -19,6 +23,8 @@ function Comments({ productId }) {
     const [valueInputRoot, setValueInputRoot] = useState('');
 
     const { dataUser } = useStore();
+
+    console.log(dataUser);
 
     const [valueInput, setValueInput] = useState('');
 
@@ -57,7 +63,7 @@ function Comments({ productId }) {
     return (
         <div className={cx('wrapper')}>
             <ToastContainer />
-            <div className={cx('form__comments__root')}>
+            <div className={cx(mode === 'light' ? 'form__comments__root' : 'form__comments__root__dark')}>
                 <input
                     onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
                     onChange={(e) => setValueInputRoot(e.target.value)}
@@ -81,7 +87,7 @@ function Comments({ productId }) {
                         </div>
                     </div>
 
-                    <div className={cx('content__comments')}>
+                    <div className={cx(mode === 'light' ? 'content__comments' : 'content__comments__dark')}>
                         <p>{comment.content}</p>
                         <span>
                             Bình luận vào <TimeAgo createdAt={comment.createdAt} />
@@ -141,7 +147,11 @@ function Comments({ productId }) {
                                             )}
 
                                             {showInput && subComment._id === idCommentRoot && (
-                                                <div className={cx('input__comments')}>
+                                                <div
+                                                    className={cx(
+                                                        mode === 'light' ? 'input__comments' : 'input__comments__dark',
+                                                    )}
+                                                >
                                                     <input
                                                         placeholder={`Trả lời bình luận ${subComment.user.fullName}`}
                                                         onChange={(e) => setValueInput(e.target.value)}

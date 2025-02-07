@@ -4,6 +4,8 @@ import { useTheme } from '../../../../store/Provider';
 import { useEffect, useState } from 'react';
 import { requestGetCategory } from '../../../../config/config';
 
+import { useNavigate } from 'react-router-dom';
+
 import imgCategory from '../../../../assets/imgCategory.webp';
 
 const cx = classNames.bind(styles);
@@ -11,11 +13,12 @@ const cx = classNames.bind(styles);
 function SlideBar() {
     const { mode } = useTheme();
 
+    const navigate = useNavigate();
+
     const [dataCategory, setDataCategory] = useState([]);
-    const [valueCategory, setValueCategory] = useState('');
 
     const fetchData = async () => {
-        const res = await requestGetCategory(valueCategory);
+        const res = await requestGetCategory('');
         setDataCategory(res);
     };
 
@@ -28,7 +31,14 @@ function SlideBar() {
             <h3>Khám phá theo danh mục</h3>
             <ul>
                 {dataCategory.map((category) => (
-                    <li key={category._id}>
+                    <li
+                        key={category._id}
+                        onClick={() => {
+                            const searchParams = new URLSearchParams(window.location.search);
+                            searchParams.set('category', category._id);
+                            navigate(`?${searchParams.toString()}`);
+                        }}
+                    >
                         <img src={imgCategory} alt="category" />
                         <span>{category.nameCategory}</span>
                     </li>

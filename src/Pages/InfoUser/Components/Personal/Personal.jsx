@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import { requestEditUser } from '../../../../config/config';
 import { toast, ToastContainer } from 'react-toastify';
 
+import { useTheme } from '../../../../store/Provider';
+
 const cx = classNames.bind(styles);
 
 function Personal() {
@@ -22,6 +24,8 @@ function Personal() {
     const [email, setEmail] = useState('');
     const [previewImage, setPreviewImage] = useState(null);
     const [image, setImage] = useState(null);
+
+    const { mode } = useTheme();
 
     useEffect(() => {
         if (dataUser) {
@@ -68,11 +72,12 @@ function Personal() {
                 <div className={cx('user__avatar')}>
                     <img
                         src={previewImage || `${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${dataUser.avatar}`}
-                        alt=""
+                        alt={dataUser?.fullName}
                     />
+
                     <input onChange={handlePreviewImage} type="file" id="file" style={{ display: 'none' }} />
                     <label htmlFor="file">
-                        <FontAwesomeIcon icon={faCamera} />
+                        <FontAwesomeIcon id={cx(mode === 'dark' && 'icon')} icon={faCamera} />
                     </label>
                 </div>
 

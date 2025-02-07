@@ -1,9 +1,10 @@
-import * as React from 'react';
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { requestDeleteDiscount } from '../../../../../../config/config';
+import { requestDeleteCategory } from '../../../../../../../config/config';
 
 import { toast } from 'react-toastify';
 
@@ -14,19 +15,20 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    borderRadius: '12px',
+    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
 };
 
-export default function ModalDelete({ open, setOpen, dataOneDiscount }) {
+function ModalDeleteCategory({ open, setOpen, dataOneCategory }) {
+    const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleDeleteDiscount = async () => {
+    const handleDeleteCategory = async () => {
         try {
-            const res = await requestDeleteDiscount(dataOneDiscount.id);
-            toast.success(res.message);
+            const res = await requestDeleteCategory(dataOneCategory.id);
             handleClose();
+            toast.success(res.message);
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -42,16 +44,18 @@ export default function ModalDelete({ open, setOpen, dataOneDiscount }) {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Xoá mã giảm giá : {dataOneDiscount.name}
+                        Xoá danh mục
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Bạn muốn xoá mã giảm giá này ?
+                    <Typography id="modal-modal-description" sx={{ mt: 2, color: 'red', fontWeight: '600' }}>
+                        Lưu ý : khi bạn xoá danh mục, tất cả các sản phẩm trong danh mục cũng sẽ bị xoá
                     </Typography>
-                    <Button sx={{ mt: 2 }} color="error" variant="contained" onClick={handleDeleteDiscount}>
-                        Xoá mã giảm giá
+                    <Button sx={{ mt: 2 }} color="error" variant="contained" onClick={handleDeleteCategory}>
+                        Vẫn xoá danh mục
                     </Button>
                 </Box>
             </Modal>
         </div>
     );
 }
+
+export default ModalDeleteCategory;

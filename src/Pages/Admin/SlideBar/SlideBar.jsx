@@ -7,6 +7,7 @@ import {
     faChartLine,
     faFile,
     faHome,
+    faLayerGroup,
     faMessage,
     faTag,
     faUser,
@@ -39,12 +40,22 @@ function SlideBar({ setType, type }) {
 
                     <li onClick={() => onType(2)} id={cx(type === 2 && 'active')}>
                         <FontAwesomeIcon id={cx('icons')} icon={faCartPlus} />
-                        <h5> Sản Phẩm</h5>
+                        <h5>Sản Phẩm</h5>
+                    </li>
+
+                    <li onClick={() => onType(7)} id={cx(type === 7 && 'active')}>
+                        <FontAwesomeIcon id={cx('icons')} icon={faLayerGroup} />
+                        <h5>Danh mục</h5>
                     </li>
 
                     <li onClick={() => onType(3)} id={cx(type === 3 && 'active')}>
                         <FontAwesomeIcon id={cx('icons')} icon={faTag} />
-                        <h5>Khuyến mãi</h5>
+                        <h5>Mã Giảm Giá</h5>
+                    </li>
+
+                    <li onClick={() => onType(8)} id={cx(type === 8 && 'active')}>
+                        <FontAwesomeIcon id={cx('icons')} icon={faTag} />
+                        <h5>Giảm Giá Sản Phẩm</h5>
                     </li>
 
                     <li onClick={() => onType(4)} id={cx(type === 4 && 'active')}>

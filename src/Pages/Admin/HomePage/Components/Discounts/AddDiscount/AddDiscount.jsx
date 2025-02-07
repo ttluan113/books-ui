@@ -76,7 +76,7 @@ function AddDisCount() {
                             },
                         }}
                         id="outlined-basic"
-                        label="Tên khuyến mãi"
+                        label="Tên mã giảm giá"
                         fullWidth
                         variant="outlined"
                         value={nameDiscount}

@@ -31,6 +31,7 @@ function HomeDiscount() {
             setDataDiscount(res);
         };
         fetchData();
+        document.title = 'Quản lý mã giảm giá';
     }, [openDelete, open]);
 
     function createData(id, name, dateStart, dateEnd, discount_user_used) {
@@ -53,9 +54,9 @@ function HomeDiscount() {
         <div className={cx('wrapper')}>
             <ToastContainer />
             <div className={cx('header')}>
-                <h4>Quản lý khuyến mãi</h4>
+                <h4>Quản lý mã giảm giá</h4>
                 <Button onClick={() => setOpen(open === false ? true : false)} variant="contained">
-                    {open === false ? 'Thêm khuyến mãi' : 'Quay lại'}
+                    {open === false ? 'Thêm mã giảm giá' : 'Quay lại'}
                 </Button>
             </div>
             {open === false ? (
@@ -64,7 +65,7 @@ function HomeDiscount() {
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Tên khuyến mãi</TableCell>
+                                    <TableCell>Tên mã giảm giá</TableCell>
                                     <TableCell align="center">Ngày bắt đầu</TableCell>
                                     <TableCell align="center">Ngày kết thúc</TableCell>
                                     <TableCell align="center">Số lượng người sử dụng</TableCell>

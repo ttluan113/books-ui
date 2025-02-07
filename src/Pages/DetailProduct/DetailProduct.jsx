@@ -262,7 +262,7 @@ function DetailProduct() {
                 </div>
             </main>
 
-            <div className={cx('comment')}>
+            <div className={cx(mode === 'light' ? 'comment' : 'comment__dark')}>
                 <Comments productId={id} />
             </div>
 

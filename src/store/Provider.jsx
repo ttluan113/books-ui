@@ -1,4 +1,4 @@
-import { requestAuth } from '../config/config';
+import { requestAuth, requestRefeshToken } from '../config/config';
 import Context from './Context';
 import CryptoJS from 'crypto-js';
 import { io } from 'socket.io-client';
@@ -15,21 +15,30 @@ export function Provider({ children }) {
     const [newMessage, setNewMessage] = useState({});
     const [newUserMessage, setNewUserMessage] = useState({});
 
-    const token = document.cookie;
+    const getAuthUser = async () => {
+        const res = await requestAuth();
+        const bytes = CryptoJS.AES.decrypt(res.auth, import.meta.env.VITE_SECRET_KEY);
+        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        const user = JSON.parse(originalText);
+        setDataUser(user);
+    };
 
     useEffect(() => {
+        const token = document.cookie;
         const fetchData = async () => {
-            const res = await requestAuth();
-            const bytes = CryptoJS.AES.decrypt(res.auth, import.meta.env.VITE_SECRET_KEY);
-            const originalText = bytes.toString(CryptoJS.enc.Utf8);
-            const user = JSON.parse(originalText);
-            setDataUser(user);
+            try {
+                await getAuthUser();
+            } catch (error) {
+                await requestRefeshToken();
+                await getAuthUser();
+                window.location.reload();
+                console.log(error);
+            }
         };
-
-        if (token === '') {
-            return;
+        if (token === 'logged=1') {
+            fetchData();
         }
-        fetchData();
+        return;
     }, []);
 
     useEffect(() => {

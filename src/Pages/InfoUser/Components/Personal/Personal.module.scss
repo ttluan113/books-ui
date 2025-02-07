@@ -20,6 +20,7 @@
         width: 100px;
         height: 100px;
         border-radius: 50%;
+        object-fit: cover;
     }
     label {
         position: absolute;
@@ -34,6 +35,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    #icon {
+        color: #64646d;
     }
 }
 

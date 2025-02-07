@@ -1,5 +1,13 @@
 .main {
     width: 55%;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 50px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.main__dark {
+    width: 55%;
     background-color: #071b2f;
     border-radius: 10px;
     margin: 50px auto;

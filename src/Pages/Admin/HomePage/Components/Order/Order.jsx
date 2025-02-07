@@ -76,7 +76,7 @@ function Order() {
     }
 
     const rows = dataOrder.map((item) =>
-        createData(item._id, item.images[0], item.name, item.phone, item.address, item.quantity),
+        createData(item._id, item?.images[0], item.name, item.phone, item.address, item.quantity),
     );
 
     const handleOrder = async (id, type) => {

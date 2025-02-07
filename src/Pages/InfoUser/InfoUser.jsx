@@ -11,6 +11,7 @@ import Personal from './Components/Personal/Personal';
 import HistoryOrder from './Components/HistoryOrder/HistoryOrder';
 
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../store/Provider';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +24,8 @@ const listController = [
 
 function InfoUser() {
     const [type, setType] = useState(0);
+
+    const { mode } = useTheme();
 
     const navigate = useNavigate();
 
@@ -57,9 +60,13 @@ function InfoUser() {
 
             <main className={cx('main')}>
                 <div className={cx('left')}>
-                    <div className={cx('left__header__user')}>
+                    <div className={cx(mode === 'light' ? 'left__header__user' : 'left__header__user__dark')}>
                         <img src="https://salt.tikicdn.com/desktop/img/avatar.png" alt="" />
-                        <div className={cx('left__header__user__info')}>
+                        <div
+                            className={cx(
+                                mode === 'light' ? 'left__header__user__info' : 'left__header__user__info__dark',
+                            )}
+                        >
                             <p>Tài khoản của</p>
                             <span>Trần Trọng Luân</span>
                         </div>
@@ -83,7 +90,9 @@ function InfoUser() {
                         </ul>
                     </div>
                 </div>
-                <div className={cx('right')}>{type === 0 ? <Personal /> : type === 1 ? <HistoryOrder /> : <></>}</div>
+                <div className={cx(mode === 'light' ? 'right' : 'right__dark')}>
+                    {type === 0 ? <Personal /> : type === 1 ? <HistoryOrder /> : <></>}
+                </div>
             </main>
         </div>
     );

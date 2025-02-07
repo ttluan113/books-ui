@@ -32,6 +32,27 @@
     }
 }
 
+.left__header__user__dark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+    .left__header__user__info__dark {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        color: #fff;
+        p {
+            font-weight: 300;
+            font-size: 15px;
+        }
+    }
+}
+
 .right__list__controller__user {
     margin-top: 20px;
     ul {
@@ -67,6 +88,12 @@
 
 .right {
     background-color: #fff;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.right__dark {
+    background-color: #091b2f;
     border-radius: 10px;
     padding: 10px 20px;
 }

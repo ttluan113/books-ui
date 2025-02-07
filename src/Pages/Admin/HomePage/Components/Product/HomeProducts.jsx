@@ -31,12 +31,17 @@ function HomeProducts() {
     const [type, setType] = useState(0);
 
     const fetchData = async () => {
-        const res = await requestGetProducts();
+        const data = {
+            sortType: '',
+            category: '',
+        };
+        const res = await requestGetProducts(data);
         setDataProducts(res);
     };
 
     useEffect(() => {
         fetchData();
+        document.title = 'Quản lý sản phẩm';
     }, [open, type]);
 
     const rows = dataProducts.map((product) => {
@@ -46,7 +51,7 @@ function HomeProducts() {
             product.name,
             product.price,
             product.quantity,
-            product.category,
+            product.nameCategory,
             product.images,
             product.options,
             product.description,

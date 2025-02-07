@@ -7,12 +7,15 @@ import imgSuccess from '../../../public/images/success.gif';
 import { useEffect, useState } from 'react';
 import { requestCheckout } from '../../config/config';
 import { useParams } from 'react-router-dom';
+import { useTheme } from '../../store/Provider';
 
 const cx = classNames.bind(styles);
 
 function CheckOut() {
     const [dataCheckout, setDataCheckout] = useState({});
     const [productsOrder, setProductsOrder] = useState([]);
+
+    const { mode } = useTheme();
 
     const { id } = useParams();
 
@@ -35,7 +38,7 @@ function CheckOut() {
                 <Header />
             </header>
 
-            <main className={cx('main')}>
+            <main className={cx(mode === 'light' ? 'main' : 'main__dark')}>
                 <div className={cx('success')}>
                     <img src={imgSuccess} alt="..." />
                     <h3>Cảm ơn bạn đã mua hàng tại L2 Team</h3>

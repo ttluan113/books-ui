@@ -1,0 +1,59 @@
+.wrapper {
+    width: 100%;
+    margin: 20px 0px;
+    border-radius: 10px;
+    background-color: #071b2f;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: fit-content;
+}
+
+.wrapper__light {
+    width: 100%;
+    margin: 20px 0px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: fit-content;
+}
+
+.header {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    #icon {
+        font-size: 11px;
+    }
+}
+
+.header__time__sale {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    span {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        font-weight: 700;
+        background-color: rgb(255, 66, 78);
+        border-radius: 4px;
+        color: white;
+        width: 26px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+    }
+}
+
+.card {
+    width: 100%;
+    padding: 5px;
+    a {
+        text-decoration: none;
+    }
+}

@@ -52,6 +52,8 @@ function Message() {
     const { dataUser, newMessage, newUserMessage } = useStore();
 
     useEffect(() => {
+        document.title = 'Tin nhắn';
+
         const fetchData = async () => {
             const res = await requestGetMessages();
             setDataMessage(res);

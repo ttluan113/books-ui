@@ -15,6 +15,10 @@ const publicRoutes = [
         component: <App />,
     },
     {
+        path: '/sort',
+        component: <App />,
+    },
+    {
         path: '/login',
         component: <LoginUser />,
     },
