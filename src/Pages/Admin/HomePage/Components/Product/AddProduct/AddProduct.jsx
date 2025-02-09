@@ -15,12 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import {
-    requestAddCategory,
-    requestAddProduct,
-    requestEditProduct,
-    requestGetCategory,
-} from '../../../../../../config/config';
+import { requestAddProduct, requestGetCategory, requestEditProduct } from '../../../../../../config/config';
 import useDebounce from '../../../../../../hooks/useDebounce';
 
 const cx = classNames.bind(styles);
@@ -45,7 +40,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-function AddProduct({ dataOneProduct }) {
+function AddProduct({ dataOneProduct, setTypeBack, setDataOneProduct }) {
     const [images, setImages] = useState([]);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -84,6 +79,29 @@ function AddProduct({ dataOneProduct }) {
         const previewUrls = files.map((file) => URL.createObjectURL(file));
         setPreviewImages(previewUrls);
     };
+
+    useEffect(() => {
+        if (dataOneProduct) {
+            setName(dataOneProduct.name);
+            setPrice(dataOneProduct.price);
+            setQuantity(dataOneProduct.quantity);
+            setDescription(dataOneProduct.description);
+            setCompany(dataOneProduct.options?.company);
+            setPublicationDate(dataOneProduct.options?.publicationDate);
+            setType(dataOneProduct.options?.type);
+            setSize(dataOneProduct.options?.size);
+            setPage(dataOneProduct.options?.page);
+            setPublishingHouse(dataOneProduct.options?.publishingHouse);
+            setSelectCategory(dataOneProduct.category);
+            dataOneProduct?.images?.forEach((image) => {
+                setPreviewImages((prevImages) => [
+                    ...prevImages,
+                    `${import.meta.env.VITE_URL_IMAGE}/uploads/products/${image}`,
+                ]);
+            });
+            setImages(dataOneProduct?.images);
+        }
+    }, [dataOneProduct]);
 
     const handleAddProduct = async () => {
         const options = {
@@ -127,12 +145,34 @@ function AddProduct({ dataOneProduct }) {
         }
     };
 
-    const handleAddCategory = async () => {
+    const handleEditProduct = async () => {
         try {
-            const res = await requestAddCategory({ valueCategory });
+            const options = {
+                company,
+                publicationDate,
+                type,
+                size,
+                page,
+                publishingHouse,
+            };
+
+            const formData = new FormData();
+            formData.append('id', dataOneProduct.id);
+            formData.append('name', name);
+            formData.append('price', price);
+            formData.append('quantity', quantity);
+            formData.append('description', description);
+            formData.append('category', selectCategory);
+            images.forEach((image) => {
+                formData.append('images', image);
+            });
+            Object.keys(options).forEach((key) => {
+                formData.append(key, options[key]);
+            });
+            const res = await requestEditProduct(formData);
             toast.success(res.message);
-            setValueCategory('');
-            fetchData();
+            setDataOneProduct({});
+            setTypeBack(0);
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -397,8 +437,13 @@ function AddProduct({ dataOneProduct }) {
                     </Button>
                 </div>
             </div>
-            <Button fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleAddProduct}>
-                Thêm Sản Phẩm
+            <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={dataOneProduct.id ? handleEditProduct : handleAddProduct}
+            >
+                {dataOneProduct.id ? 'Cập nhật' : 'Thêm Sản Phẩm'}
             </Button>
         </div>
     );

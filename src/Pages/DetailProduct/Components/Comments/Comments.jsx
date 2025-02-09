@@ -24,8 +24,6 @@ function Comments({ productId }) {
 
     const { dataUser } = useStore();
 
-    console.log(dataUser);
-
     const [valueInput, setValueInput] = useState('');
 
     const fetchData = async () => {

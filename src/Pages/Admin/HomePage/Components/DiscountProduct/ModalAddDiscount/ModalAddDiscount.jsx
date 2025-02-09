@@ -43,11 +43,15 @@ function ModalAddDiscount() {
     const [dateEnd, setDateEnd] = useState(Date.now());
 
     useEffect(() => {
-        const fetchDat = async () => {
-            const res = await requestGetProducts();
-            setDataProduct(res);
+        const fetchData = async () => {
+            const data = {
+                sortType: '',
+                category: '',
+            };
+            const res = await requestGetProducts(data);
+            setDataProduct(res.data);
         };
-        fetchDat();
+        fetchData();
     }, []);
 
     const columns = [

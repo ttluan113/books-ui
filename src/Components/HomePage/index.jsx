@@ -13,6 +13,7 @@ function IndexHomePage() {
     const [products, setProducts] = useState([]);
 
     const [searchParams] = useSearchParams();
+    const [pageProduct, setPageProduct] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,10 +21,11 @@ function IndexHomePage() {
                 sortType: searchParams.get('sortType') || '',
                 category: searchParams.get('category') || '',
                 page: searchParams.get('page') || 1,
-                limit: 5,
+                limit: 15,
             };
             const res = await requestGetProducts(data);
-            setProducts(res);
+            setProducts(res.data);
+            setPageProduct(res.totalPages);
         };
         fetchData();
     }, [searchParams]);
@@ -35,7 +37,7 @@ function IndexHomePage() {
             </div>
 
             <div>
-                <HomePage dataProducts={products} />
+                <HomePage dataProducts={products} pageProduct={pageProduct} />
             </div>
         </div>
     );

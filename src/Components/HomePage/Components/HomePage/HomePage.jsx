@@ -23,7 +23,7 @@ import PaginationPage from '../../../Pagination/Pagination';
 
 const cx = classNames.bind(styles);
 
-function HomePage({ dataProducts }) {
+function HomePage({ dataProducts, pageProduct }) {
     const { mode } = useTheme();
     const bannerRef = useRef(null);
 
@@ -178,7 +178,7 @@ function HomePage({ dataProducts }) {
                     <div>
                         <HomeCardBody products={dataProducts} />
                         <div className={cx('pagination')}>
-                            <PaginationPage />
+                            <PaginationPage totalPages={pageProduct} />
                         </div>
                     </div>
                 ) : (

@@ -36,7 +36,7 @@ function HomeProducts() {
             category: '',
         };
         const res = await requestGetProducts(data);
-        setDataProducts(res);
+        setDataProducts(res.data);
     };
 
     useEffect(() => {
@@ -141,7 +141,11 @@ function HomeProducts() {
                         </TableContainer>
                     </div>
                 ) : type === 1 ? (
-                    <AddProduct dataOneProduct={dataOneProduct} />
+                    <AddProduct
+                        dataOneProduct={dataOneProduct}
+                        setTypeBack={setType}
+                        setDataOneProduct={setDataOneProduct}
+                    />
                 ) : (
                     <></>
                 )}

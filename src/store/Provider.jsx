@@ -1,4 +1,4 @@
-import { requestAuth, requestRefeshToken } from '../config/config';
+import { requestAuth } from '../config/config';
 import Context from './Context';
 import CryptoJS from 'crypto-js';
 import { io } from 'socket.io-client';
@@ -17,7 +17,7 @@ export function Provider({ children }) {
 
     const getAuthUser = async () => {
         const res = await requestAuth();
-        const bytes = CryptoJS.AES.decrypt(res.auth, import.meta.env.VITE_SECRET_KEY);
+        const bytes = CryptoJS.AES.decrypt(res, import.meta.env.VITE_SECRET_KEY);
         const originalText = bytes.toString(CryptoJS.enc.Utf8);
         const user = JSON.parse(originalText);
         setDataUser(user);
@@ -29,9 +29,6 @@ export function Provider({ children }) {
             try {
                 await getAuthUser();
             } catch (error) {
-                await requestRefeshToken();
-                await getAuthUser();
-                window.location.reload();
                 console.log(error);
             }
         };

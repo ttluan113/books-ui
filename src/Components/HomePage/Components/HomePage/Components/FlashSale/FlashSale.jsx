@@ -7,7 +7,7 @@ import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 
-import { requestGetProductsTopBuy } from '../../../../../../config/config';
+import { requestGetProductSale } from '../../../../../../config/config';
 
 import CardBody from '../../../../../CardBody/CardBody';
 import { useTheme } from '../../../../../../store/Provider';
@@ -31,7 +31,7 @@ function FlashSale() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await requestGetProductsTopBuy();
+            const res = await requestGetProductSale();
             setDataProducts(res);
         };
         fetchData();

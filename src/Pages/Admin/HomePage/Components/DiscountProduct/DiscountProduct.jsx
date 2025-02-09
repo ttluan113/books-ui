@@ -14,7 +14,7 @@ function DiscountProduct() {
             <ToastContainer />
             <div className={cx('header')}>
                 <h4>Giảm giá sản phẩm</h4>
-                <Button variant="contained">Thêm mã giảm giá</Button>
+                <Button variant="contained">Thêm giảm giá</Button>
             </div>
 
             <ModalAddDiscount />

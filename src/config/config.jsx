@@ -67,12 +67,17 @@ export const requestDeleteProduct = async (id) => {
 };
 
 export const requestEditProduct = async (data) => {
-    const res = await request.post('/api/edit-product', { data });
+    const res = await request.put('/api/edit-product', data);
     return res.data;
 };
 
 export const requestGetProductsTopBuy = async () => {
     const res = await request.get('/api/product-top-buy');
+    return res.data;
+};
+
+export const requestGetProductSale = async () => {
+    const res = await request.get('/api/product-flash-sale');
     return res.data;
 };
 
@@ -112,7 +117,7 @@ export const requestGetCarts = async () => {
 };
 
 export const requestDeleteProductCart = async (id) => {
-    const res = await request.delete('/api/delete-product', { params: { idProduct: id } });
+    const res = await request.delete('/api/delete-product-cart', { params: { idProduct: id } });
     return res.data;
 };
 
@@ -227,6 +232,11 @@ export const requestGetDiscountProduct = async () => {
     return res.data;
 };
 
+export const requestRefreshToken = async () => {
+    const res = await request.get('/api/refresh-token');
+    return res.data;
+};
+
 let isRefreshing = false;
 let failedRequestsQueue = [];
 
@@ -236,7 +246,7 @@ request.interceptors.response.use(
         const originalRequest = error.config;
 
         // Nếu lỗi 401 (Unauthorized) và request chưa từng thử refresh
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             if (!isRefreshing) {
@@ -244,12 +254,10 @@ request.interceptors.response.use(
 
                 try {
                     // Gửi yêu cầu refresh token
-                    const { data } = await request.get('/api/refresh-token');
-
-                    // Lưu token mới
+                    await requestRefreshToken();
 
                     // Xử lý lại tất cả các request bị lỗi 401 trước đó
-                    failedRequestsQueue.forEach((req) => req.resolve(data.accessToken));
+                    failedRequestsQueue.forEach((req) => req.resolve());
                     failedRequestsQueue = [];
                 } catch (refreshError) {
                     // Nếu refresh thất bại, đăng xuất
@@ -265,9 +273,8 @@ request.interceptors.response.use(
             // Trả về một Promise để retry request sau khi token mới được cập nhật
             return new Promise((resolve, reject) => {
                 failedRequestsQueue.push({
-                    resolve: (token) => {
-                        originalRequest.headers['Authorization'] = `Bearer ${token}`;
-                        resolve(API(originalRequest));
+                    resolve: () => {
+                        resolve(request(originalRequest));
                     },
                     reject: (err) => reject(err),
                 });
