@@ -13,6 +13,10 @@ import HistoryOrder from './Components/HistoryOrder/HistoryOrder';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../store/Provider';
 
+import Address from './Components/Address/Address';
+import { useStore } from '../../hooks/useStore';
+import Favorite from './Components/Favorite/Favorite';
+
 const cx = classNames.bind(styles);
 
 const listController = [
@@ -27,6 +31,8 @@ function InfoUser() {
 
     const { mode } = useTheme();
 
+    const { dataUser } = useStore();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,14 +44,11 @@ function InfoUser() {
             case '/order':
                 setType(1);
                 break;
-            case '/review':
+            case '/favorite':
                 setType(2);
                 break;
-            case '/favorite':
-                setType(3);
-                break;
             case '/address':
-                setType(4);
+                setType(3);
                 break;
             default:
                 break;
@@ -68,7 +71,7 @@ function InfoUser() {
                             )}
                         >
                             <p>Tài khoản của</p>
-                            <span>Trần Trọng Luân</span>
+                            <span>{dataUser.fullName}</span>
                         </div>
                     </div>
 
@@ -91,7 +94,17 @@ function InfoUser() {
                     </div>
                 </div>
                 <div className={cx(mode === 'light' ? 'right' : 'right__dark')}>
-                    {type === 0 ? <Personal /> : type === 1 ? <HistoryOrder /> : <></>}
+                    {type === 0 ? (
+                        <Personal />
+                    ) : type === 1 ? (
+                        <HistoryOrder />
+                    ) : type === 3 ? (
+                        <Address />
+                    ) : type === 2 ? (
+                        <Favorite />
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </main>
         </div>

@@ -3,10 +3,10 @@ import styles from './DetailProduct.module.scss';
 import Header from '../../Components/Header/Header';
 import Rating from '@mui/material/Rating';
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import { useParams, useNavigate } from 'react-router-dom';
-import { requestAddCart, requestGetProduct } from '../../config/config';
+import { requestAddCart, requestGetHeartProduct, requestGetProduct, requestHeartProduct } from '../../config/config';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../store/Provider';
 import Slider from 'react-slick';
@@ -16,6 +16,7 @@ import TimeAgo from '../../utils/TimeAgo';
 import Messenger from './Components/Messenger/Messenger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
+import CryptoJS from 'crypto-js';
 
 const cx = classNames.bind(styles);
 
@@ -38,9 +39,10 @@ function DetailProduct() {
     const [idProduct, setIdProduct] = useState('');
 
     const [product, setProduct] = useState({});
-    const [sumPrice, setSumPrice] = useState(0);
 
     const [showMessenger, setShowMessenger] = useState(false);
+
+    const [dataHeartProducts, setDataHeartProducts] = useState([]);
 
     const { id } = useParams();
     const { mode } = useTheme();
@@ -63,8 +65,14 @@ function DetailProduct() {
         document.title = res.product.name;
     };
 
+    const getHeartProduct = async () => {
+        const res = await requestGetHeartProduct();
+        setDataHeartProducts(res);
+    };
+
     useEffect(() => {
         fetchData();
+        getHeartProduct();
     }, [idProduct, id]);
 
     const onIncreaseQuantity = () => {
@@ -79,10 +87,10 @@ function DetailProduct() {
         }
     };
 
-    useEffect(() => {
+    const totalPrice = useMemo(() => {
         const price = product?.price * quantity;
-        setSumPrice(price);
-    }, [quantity, product]);
+        return price;
+    }, [product, quantity]);
 
     const sanitizedDescription = DOMPurify.sanitize(product?.description);
 
@@ -95,6 +103,21 @@ function DetailProduct() {
             const res = await requestAddCart(data);
             await fetchData();
             toast.success(res.message);
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    };
+
+    const handleHeartProduct = async () => {
+        try {
+            const res = await requestHeartProduct(product._id);
+            if (res.success === true) {
+                await getHeartProduct();
+                toast.success(res.message);
+            } else {
+                await getHeartProduct();
+                toast.warning(res.message);
+            }
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -228,12 +251,16 @@ function DetailProduct() {
 
                         <div className={cx('total')}>
                             <p>Tạm Tính</p>
-                            <p className={cx('total-price')}>{sumPrice?.toLocaleString()} ₫</p>
+                            <p className={cx('total-price')}>{totalPrice?.toLocaleString()} ₫</p>
                         </div>
 
                         <div className={cx('button-group')}>
                             <button onClick={handleAddCart} className={cx('button-add-to-cart')}>
                                 Thêm Vào Giỏ Hàng
+                            </button>
+
+                            <button onClick={handleHeartProduct} className={cx('button-add-to-heart')}>
+                                {dataHeartProducts.includes(product?._id) ? 'Xoá  yêu thích' : 'Yêu thích sản phẩm'}
                             </button>
                         </div>
                     </div>

@@ -42,6 +42,36 @@ export const requestRefeshToken = async () => {
     return res.data;
 };
 
+export const requestGetAllUser = async () => {
+    const res = await request.get('/api/get-all-user');
+    return res.data;
+};
+
+export const requestCreateAddress = async (data) => {
+    const res = await request.post('/api/create-address', { data });
+    return res.data;
+};
+
+export const requestDeleteAddress = async (id) => {
+    const res = await request.delete('/api/delete-address', { params: { idAddress: id } });
+    return res.data;
+};
+
+export const requestHeartProduct = async (id) => {
+    const res = await request.post('/api/heart-product', { productId: id });
+    return res.data;
+};
+
+export const requestGetHeartProduct = async () => {
+    const res = await request.get('/api/get-heart-product');
+    return res.data;
+};
+
+export const requestGetHeartProductUser = async () => {
+    const res = await request.get('/api/get-heart-product-user');
+    return res.data;
+};
+
 /// product
 
 export const requestAddProduct = async (data) => {
@@ -229,6 +259,11 @@ export const requestCreateDiscountProduct = async (data) => {
 
 export const requestGetDiscountProduct = async () => {
     const res = await request.get('/api/get-discount-product');
+    return res.data;
+};
+
+export const requestDeleteDiscountProduct = async (id) => {
+    const res = await request.delete('/api/delete-discount-product', { params: { id } });
     return res.data;
 };
 

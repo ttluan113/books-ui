@@ -361,3 +361,40 @@
     font-weight: 600;
     color: #ff424e;
 }
+
+.form__input__address {
+    display: flex;
+    gap: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.form__input__address__info {
+    display: flex;
+    gap: 10px;
+    span {
+        border-left: 1px solid #ccc;
+        padding-left: 10px;
+        padding-bottom: 5px;
+    }
+}
+
+.form__input__address__dark {
+    display: flex;
+    gap: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.form__input__address__info__dark {
+    display: flex;
+    gap: 10px;
+    span {
+        border-left: 1px solid #ccc;
+        padding-left: 10px;
+    }
+}

@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -50,6 +50,8 @@ function Message() {
     const [valueMessage, setValueMessage] = useState('');
 
     const { dataUser, newMessage, newUserMessage } = useStore();
+
+    const divRef = useRef(null);
 
     useEffect(() => {
         document.title = 'Tin nhắn';
@@ -98,9 +100,16 @@ function Message() {
 
     useEffect(() => {
         if (newMessage) {
-            setListMessage([...listMessage, newMessage]);
+            setListMessage((prev) => [...prev, newMessage]);
+            setTimeout(() => {
+                divRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
         }
     }, [newMessage]);
+
+    useEffect(() => {
+        divRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [listMessage]);
 
     return (
         <div className={cx('wrapper')}>
@@ -150,11 +159,11 @@ function Message() {
                     </div>
                     <div className={cx('main__home__page')}>
                         <div className={cx('list__message')}>
-                            {listMessage.map((msg) => (
+                            {listMessage.map((msg, index) => (
                                 <div
-                                    id={msg.senderId === dataUser._id && cx('bgr__msg')}
-                                    className={cx('message__receive', { bgr__msg: msg.senderId === dataUser._id })}
                                     key={msg._id}
+                                    ref={index === listMessage.length - 1 ? divRef : null} // Đặt ref vào tin nhắn cuối cùng
+                                    className={cx('message__receive', { bgr__msg: msg.senderId === dataUser._id })}
                                 >
                                     <p>{msg.content}</p>
                                     <span>
@@ -164,6 +173,7 @@ function Message() {
                             ))}
                         </div>
                     </div>
+
                     <div className={cx('footer__home__page')}>
                         <input
                             type="text"

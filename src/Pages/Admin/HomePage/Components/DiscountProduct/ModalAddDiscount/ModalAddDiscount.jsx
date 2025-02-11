@@ -32,8 +32,7 @@ const style = {
 
 const cx = classNames.bind(styles);
 
-function ModalAddDiscount() {
-    const [open, setOpen] = useState(true);
+function ModalAddDiscount({ open, setOpen }) {
     const handleClose = () => setOpen(false);
 
     const [selectedRows, setSelectedRows] = useState([]);
@@ -176,7 +175,7 @@ function ModalAddDiscount() {
                             <Button onClick={handleAddDiscount} fullWidth variant="contained" color="primary">
                                 Lưu
                             </Button>
-                            <Button fullWidth variant="contained" color="error">
+                            <Button onClick={handleClose} fullWidth variant="contained" color="error">
                                 Hủy
                             </Button>
                         </div>

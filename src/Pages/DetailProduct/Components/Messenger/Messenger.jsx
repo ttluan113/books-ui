@@ -2,10 +2,10 @@ import classNames from 'classnames/bind';
 import styles from './Messenger.module.scss';
 import imgAi from '../../../../assets/imgAi.png';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { requestCreateMessage, requestGetMessages, requestGetMessage } from '../../../../config/config';
+import { requestCreateMessage, requestGetMessage } from '../../../../config/config';
 import { useStore } from '../../../../hooks/useStore';
 
 const cx = classNames.bind(styles);
@@ -16,6 +16,14 @@ function Messenger({ setShow }) {
     const [dataMessage, setDataMessage] = useState([]);
 
     const [valueMessage, setValueMessage] = useState('');
+
+    const divRef = useRef(null);
+
+    useEffect(() => {
+        if (divRef.current) {
+            divRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [dataMessage]);
 
     const handleCreateMessage = async () => {
         try {
@@ -34,7 +42,7 @@ function Messenger({ setShow }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await requestGetMessages();
+            const res = await requestGetMessage();
             setDataMessage(res);
         };
         fetchData();
@@ -62,8 +70,8 @@ function Messenger({ setShow }) {
 
             <main className={cx('main')}>
                 <div className={cx('list__message')}>
-                    {dataMessage.map((item) => (
-                        <div key={item._id}>
+                    {dataMessage.map((item, index) => (
+                        <div key={item._id} ref={index === dataMessage.length - 1 ? divRef : null}>
                             {item.senderId === dataUser._id ? (
                                 <div className={cx('message__item')}>
                                     <img src={'https://book.local2/public/images/logo.webp'} alt="" />

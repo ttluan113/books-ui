@@ -63,13 +63,13 @@ function FlashSale() {
                     <div className={cx('header')}>
                         <h4>Flash Sale</h4>
                         <div className={cx('header__time__sale')}>
-                            <span className={cx('time-box')}>{time.days}</span>
+                            <span className={cx('time-box')}>{time.days} Ngày</span>
                             <FontAwesomeIcon id={cx('icon')} icon={faEllipsisVertical} />
-                            <span className={cx('time-box')}>{time.hours}</span>
+                            <span className={cx('time-box')}>{time.hours} Giờ</span>
                             <FontAwesomeIcon id={cx('icon')} icon={faEllipsisVertical} />
-                            <span className={cx('time-box')}>{time.minutes}</span>
+                            <span className={cx('time-box')}>{time.minutes} Phút</span>
                             <FontAwesomeIcon id={cx('icon')} icon={faEllipsisVertical} />
-                            <span className={cx('time-box')}>{time.seconds}</span>
+                            <span className={cx('time-box')}>{time.seconds} Giây</span>
                         </div>
                     </div>
 

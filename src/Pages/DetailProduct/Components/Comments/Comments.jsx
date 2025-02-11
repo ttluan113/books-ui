@@ -60,7 +60,6 @@ function Comments({ productId }) {
 
     return (
         <div className={cx('wrapper')}>
-            <ToastContainer />
             <div className={cx(mode === 'light' ? 'form__comments__root' : 'form__comments__root__dark')}>
                 <input
                     onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}

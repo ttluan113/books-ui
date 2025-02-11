@@ -87,7 +87,7 @@ function HomePage({ dataProducts, pageProduct }) {
         img.crossOrigin = 'anonymous';
 
         img.onload = () => {
-            const color = fac.getColor(img);
+            const color = fac.getColor(img) || { hex: '#000' };
             if (bannerRef.current) {
                 bannerRef.current.style.background = `linear-gradient(-90deg, ${color.hex}, rgba(0, 0, 0, 0.05))`;
             }

@@ -8,9 +8,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '../../hooks/useStore';
 import { requestGetCarts, requestPayment, requestSearchAddress } from '../../config/config';
 import { Link, useNavigate } from 'react-router-dom';
+
 import useDebounce from '../../hooks/useDebounce';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '../../store/Provider';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -133,6 +132,7 @@ function Payments() {
 
                     <div className={cx(mode === 'dark' ? 'form__input__dark' : 'form__input')}>
                         <h4>Thông tin nhận hàng</h4>
+
                         <div className={cx('form__input__list')}>
                             <TextField
                                 id="outlined-basic"
@@ -168,6 +168,33 @@ function Payments() {
                                     )}
                                 />
                             </Stack>
+                        </div>
+
+                        <div>
+                            <h4>Danh sách địa chỉ hiện có</h4>
+                            {dataUser?.addressDefault?.map((address) => (
+                                <div
+                                    key={address._id}
+                                    onClick={() => {
+                                        setAddress(address.address);
+                                        setPhone(address.phone);
+                                        setFullName(address.fullName);
+                                    }}
+                                    className={cx(
+                                        mode === 'dark' ? 'form__input__address__dark' : 'form__input__address',
+                                    )}
+                                >
+                                    <div className={cx('form__input__address__info__1')}>
+                                        <div className={cx('form__input__address__info')}>
+                                            <h4>{address.fullName}</h4>
+                                            <span>{address.phone}</span>
+                                        </div>
+                                        <div>
+                                            <p>{address.address}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 

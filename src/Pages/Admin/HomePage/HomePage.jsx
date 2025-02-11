@@ -7,6 +7,8 @@ import HomeDiscount from './Components/Discounts/HomeDiscount';
 import Category from './Components/Category/Category';
 import { useEffect } from 'react';
 import DiscountProduct from './Components/DiscountProduct/DiscountProduct';
+import ControllerUser from './Components/Users/User';
+import Dashboard from './Components/Dashboard/Dashboard';
 
 const cx = classNames.bind(styles);
 
@@ -29,6 +31,10 @@ function HomePage({ type }) {
                 <Category />
             ) : type === 8 ? (
                 <DiscountProduct />
+            ) : type === 4 ? (
+                <ControllerUser />
+            ) : type === 0 ? (
+                <Dashboard />
             ) : (
                 <></>
             )}
