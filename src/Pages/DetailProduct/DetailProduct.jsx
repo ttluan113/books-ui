@@ -50,19 +50,23 @@ function DetailProduct() {
     const navigate = useNavigate();
 
     const fetchData = async () => {
-        const res = await requestGetProduct(idProduct || id);
-        setProduct(res.product);
-        setBrandBooks(res.brandProducts);
-        setDataFeedback(res.feedbackUser);
+        try {
+            const res = await requestGetProduct(idProduct || id);
+            setProduct(res.product);
+            setBrandBooks(res.brandProducts);
+            setDataFeedback(res.feedbackUser);
 
-        const totalRating = res.feedbackUser.reduce((total, item) => total + item.rating, 0);
-        const averageRating = totalRating / res.feedbackUser.length;
+            const totalRating = res.feedbackUser.reduce((total, item) => total + item.rating, 0);
+            const averageRating = totalRating / res.feedbackUser.length;
 
-        setRatingProduct(averageRating.toFixed(1));
+            setRatingProduct(averageRating.toFixed(1));
 
-        setIdProduct(id);
+            setIdProduct(id);
 
-        document.title = res.product.name;
+            document.title = res.product.name;
+        } catch (error) {
+            navigate('/notfound');
+        }
     };
 
     const getHeartProduct = async () => {

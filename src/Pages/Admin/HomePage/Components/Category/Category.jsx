@@ -29,10 +29,15 @@ function Category() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await requestGetCategory();
-            setDataCategory(res);
+            try {
+                const res = await requestGetCategory();
+                setDataCategory(res);
+            } catch (error) {
+                console.log(error);
+            }
         };
         fetchData();
+
         document.title = 'Quản lý danh mục';
     }, [open, openAddCategory, openEditCategory]);
 

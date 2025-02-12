@@ -72,6 +72,16 @@ export const requestGetHeartProductUser = async () => {
     return res.data;
 };
 
+export const requestForgotPassword = async (email) => {
+    const res = await request.post('/api/forgot-password', { email });
+    return res.data;
+};
+
+export const requestResetPassword = async (otp, password) => {
+    const res = await request.post('/api/reset-password', { otp, password });
+    return res.data;
+};
+
 /// product
 
 export const requestAddProduct = async (data) => {
@@ -269,6 +279,33 @@ export const requestDeleteDiscountProduct = async (id) => {
 
 export const requestRefreshToken = async () => {
     const res = await request.get('/api/refresh-token');
+    return res.data;
+};
+
+/// statisticalRoutes
+export const requestGetStatistical = async () => {
+    const res = await request.get('/api/statistical');
+    return res.data;
+};
+
+/// blogs
+
+export const requestCreateBlog = async (data) => {
+    const res = await request.post('/api/create-blog', data);
+    return res.data;
+};
+
+export const requestGetBlogs = async () => {
+    const res = await request.get('/api/blogs');
+    return res.data;
+};
+export const requestGetBlog = async (idBlog) => {
+    const res = await request.get('/api/blog', { params: { idBlog } });
+    return res.data;
+};
+
+export const requestDeleteBlog = async (idBlog) => {
+    const res = await request.delete('/api/delete-blog', { params: { idBlog } });
     return res.data;
 };
 

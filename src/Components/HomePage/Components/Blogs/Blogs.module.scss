@@ -1,0 +1,70 @@
+.wrapper__dark {
+    background-color: #071b2f;
+    width: 100%;
+    height: fit-content;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wrapper {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: fit-content;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+
+    img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.content__dark {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Giới hạn hiển thị 4 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    h4 {
+        font-size: 15px;
+        font-weight: 500;
+        color: rgb(255, 66, 78);
+    }
+    p {
+        font-size: 14px;
+    }
+}
+
+.content {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Giới hạn hiển thị 4 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    h4 {
+        font-size: 15px;
+        font-weight: 500;
+        color: rgb(255, 66, 78);
+    }
+    p {
+        font-size: 14px;
+    }
+}

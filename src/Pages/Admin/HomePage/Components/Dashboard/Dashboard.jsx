@@ -6,10 +6,13 @@ import { useStore } from '../../../../../hooks/useStore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faCrown, faGift } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { requestGetStatistical } from '../../../../../config/config';
+
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -18,16 +21,30 @@ const cx = classNames.bind(styles);
 function Dashboard() {
     const { dataUser } = useStore();
 
-    useEffect(() => {
-        document.title = 'Quản trị admin ';
-    }, []);
+    const [dataStatiscal, setDataStatiscal] = useState({});
+    const [dataChart, setDataChart] = useState([]);
 
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await requestGetStatistical();
+                setDataStatiscal(res);
+                setDataChart(res.formattedResult);
+            } catch (error) {
+                navigate('/notfound');
+            }
+        };
+
+        fetchData();
+    }, []);
     const data = {
-        labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+        labels: dataChart.map((label) => label.dayOfWeek),
         datasets: [
             {
-                label: 'Value',
-                data: [30, 50, 40, 60, 80, 70, 90],
+                label: 'Doanh thu',
+                data: dataChart.map((chart) => `${chart.totalRevenue}`),
                 backgroundColor: 'rgba(136, 132, 216, 0.6)',
                 borderColor: '#8884d8',
                 borderWidth: 1,
@@ -58,27 +75,27 @@ function Dashboard() {
                             <div>
                                 <FontAwesomeIcon id={cx('icon')} icon={faBookmark} />
                             </div>
-                            <span>500</span>
-                            <p>Tổng đơn hàng</p>
-                            <p>+10% so với ngày hôm qua</p>
+                            <span>{dataStatiscal.totalOrder}</span>
+                            <p>Tổng đơn hàng đã giao thành công</p>
+                            <p>+{dataStatiscal.percentOrder}% so với ngày hôm qua</p>
                         </div>
 
                         <div className={cx('header__admin__row1__inner__2')}>
                             <div>
                                 <FontAwesomeIcon id={cx('icon')} icon={faGift} />
                             </div>
-                            <span>500</span>
+                            <span>{dataStatiscal.totalProduct}</span>
                             <p>Sản phẩm đã bán</p>
-                            <p>+10% so với ngày hôm qua</p>
+                            <p>+{dataStatiscal.percentProduct}% so với ngày hôm qua</p>
                         </div>
 
                         <div className={cx('header__admin__row1__inner__3')}>
                             <div>
                                 <FontAwesomeIcon id={cx('icon')} icon={faUser} />
                             </div>
-                            <span>500</span>
+                            <span>{dataStatiscal.totalUser}</span>
                             <p>Người dùng mới</p>
-                            <p>+10% so với ngày hôm qua</p>
+                            <p>+{dataStatiscal.percentUser}% so với ngày hôm qua</p>
                         </div>
                     </div>
                     <div className={cx('header__admin__row2')}>

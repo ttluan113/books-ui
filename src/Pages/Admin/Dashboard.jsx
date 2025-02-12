@@ -8,7 +8,16 @@ const cx = classNames.bind(styles);
 
 function Dashboard() {
     useEffect(() => {
-        document.title = 'Admin | L2 Team';
+        document.title = 'Quản trị admin ';
+    }, []);
+
+    useEffect(() => {
+        const localStore = localStorage.getItem('theme');
+        if (localStore === 'light') {
+            localStorage.setItem('theme', 'dark');
+            window.location.reload();
+        }
+        return;
     }, []);
 
     const [type, setType] = useState(0);

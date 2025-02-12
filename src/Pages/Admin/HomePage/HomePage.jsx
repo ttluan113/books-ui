@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import DiscountProduct from './Components/DiscountProduct/DiscountProduct';
 import ControllerUser from './Components/Users/User';
 import Dashboard from './Components/Dashboard/Dashboard';
+import Blog from './Components/Blog/Blog';
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +36,8 @@ function HomePage({ type }) {
                 <ControllerUser />
             ) : type === 0 ? (
                 <Dashboard />
+            ) : type === 5 ? (
+                <Blog />
             ) : (
                 <></>
             )}

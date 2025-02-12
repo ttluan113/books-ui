@@ -1,9 +1,11 @@
 import App from '../App';
+import NotFoundPage from '../Pages/404NotFound/NotFoundPage';
 import Dashboard from '../Pages/Admin/Dashboard';
 import Cart from '../Pages/Cart/Cart';
 import CheckOut from '../Pages/checkout/CheckOut';
+import DetailBlog from '../Pages/DetailBlog/DetailBlog';
 import DetailProduct from '../Pages/DetailProduct/DetailProduct';
-import HistoryOrder from '../Pages/InfoUser/Components/HistoryOrder/HistoryOrder';
+import ForgotPassword from '../Pages/ForgotPassword/ForgotPassword';
 import InfoUser from '../Pages/InfoUser/InfoUser';
 import LoginUser from '../Pages/Login/Login';
 import Payments from '../Pages/Payments/Payments';
@@ -69,11 +71,29 @@ const publicRoutes = [
     },
 
     {
+        path: '/blog/:id',
+        component: <DetailBlog />,
+    },
+
+    {
         path: '/admin',
         component: <Dashboard />,
     },
+
+    {
+        path: '/notfound',
+        component: <NotFoundPage />,
+    },
+
+    {
+        path: '/forgot-password',
+        component: <ForgotPassword />,
+    },
+
+    {
+        path: '*',
+        component: <NotFoundPage />,
+    },
 ];
 
-const privateRoutes = {};
-
-export { publicRoutes, privateRoutes };
+export { publicRoutes };

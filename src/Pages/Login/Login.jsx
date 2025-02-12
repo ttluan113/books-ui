@@ -101,19 +101,9 @@ function LoginUser() {
                                 }}
                             />
 
-                            <Link
-                                href="/forgot-password"
-                                sx={{
-                                    textAlign: 'right',
-
-                                    textDecoration: 'none',
-                                    '&:hover': {
-                                        textDecoration: 'underline',
-                                    },
-                                }}
-                            >
+                            <LinkRouter to="/forgot-password" id={cx('link')}>
                                 Quên mật khẩu?
-                            </Link>
+                            </LinkRouter>
 
                             <Button onClick={handleLogin} variant="contained" fullWidth sx={{ mt: 2 }}>
                                 Đăng nhập
