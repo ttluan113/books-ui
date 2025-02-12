@@ -26,7 +26,7 @@ function Cart() {
     const [dataDiscount, setDataDiscount] = useState([]);
     const [totalCart, setTotalCart] = useState(0);
 
-    const { dataUser } = useStore();
+    const { dataUser, getCart } = useStore();
     const { mode } = useTheme();
 
     // Fetch cart data
@@ -59,6 +59,7 @@ function Cart() {
         async (id) => {
             try {
                 await requestDeleteProductCart(id);
+                await getCart();
                 fetchData();
             } catch (error) {
                 toast.error(error.response.data.message);
@@ -70,7 +71,8 @@ function Cart() {
     const handleDeleteCart = useCallback(async () => {
         try {
             await requestDeleteCart();
-            fetchData();
+            await getCart();
+            await fetchData();
         } catch (error) {
             toast.error(error.response.data.message);
         }

@@ -1,4 +1,4 @@
-import { requestAuth } from '../config/config';
+import { requestAuth, requestGetCarts } from '../config/config';
 import Context from './Context';
 import CryptoJS from 'crypto-js';
 import { io } from 'socket.io-client';
@@ -14,6 +14,8 @@ export function Provider({ children }) {
     const [newNotify, setNewNotify] = useState({});
     const [newMessage, setNewMessage] = useState({});
     const [newUserMessage, setNewUserMessage] = useState({});
+
+    const [dataCart, setDataCartCart] = useState([]);
 
     const getAuthUser = async () => {
         const res = await requestAuth();
@@ -36,6 +38,15 @@ export function Provider({ children }) {
             fetchData();
         }
         return;
+    }, []);
+
+    const fetchDataCart = async () => {
+        const res = await requestGetCarts();
+        setDataCartCart(res || []);
+    };
+
+    useEffect(() => {
+        fetchDataCart();
     }, []);
 
     useEffect(() => {
@@ -63,7 +74,9 @@ export function Provider({ children }) {
     }, [socket, newNotify, newMessage, newUserMessage]);
 
     return (
-        <Context.Provider value={{ dataUser, socket, newNotify, newMessage, newUserMessage }}>
+        <Context.Provider
+            value={{ dataUser, socket, newNotify, newMessage, newUserMessage, dataCart, getCart: fetchDataCart }}
+        >
             {children}
         </Context.Provider>
     );

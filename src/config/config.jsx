@@ -28,7 +28,8 @@ export const requestLogin = async (data) => {
 };
 
 export const requestSearchAddress = async (address) => {
-    const res = await request.get('/api/search-address', { params: { address } });
+    const params = Object.fromEntries(Object.entries({ address }).filter(([_, v]) => v));
+    const res = await request.get('/api/search-address', { params: { params } });
     return res.data;
 };
 

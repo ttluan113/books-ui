@@ -6,7 +6,13 @@ import { Box } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import { useParams, useNavigate } from 'react-router-dom';
-import { requestAddCart, requestGetHeartProduct, requestGetProduct, requestHeartProduct } from '../../config/config';
+import {
+    requestAddCart,
+    requestGetCarts,
+    requestGetHeartProduct,
+    requestGetProduct,
+    requestHeartProduct,
+} from '../../config/config';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../store/Provider';
 import Slider from 'react-slick';
@@ -16,7 +22,7 @@ import TimeAgo from '../../utils/TimeAgo';
 import Messenger from './Components/Messenger/Messenger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
-import CryptoJS from 'crypto-js';
+import { useStore } from '../../hooks/useStore';
 
 const cx = classNames.bind(styles);
 
@@ -43,6 +49,8 @@ function DetailProduct() {
     const [showMessenger, setShowMessenger] = useState(false);
 
     const [dataHeartProducts, setDataHeartProducts] = useState([]);
+
+    const { getCart } = useStore();
 
     const { id } = useParams();
     const { mode } = useTheme();
@@ -106,6 +114,7 @@ function DetailProduct() {
         try {
             const res = await requestAddCart(data);
             await fetchData();
+            await getCart();
             toast.success(res.message);
         } catch (error) {
             toast.error(error.response.data.message);

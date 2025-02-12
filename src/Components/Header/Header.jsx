@@ -30,11 +30,16 @@ import TimeAgo from '../../utils/TimeAgo';
 const cx = classNames.bind(styles);
 
 function Header() {
-    const { dataUser, newNotify } = useStore();
+    const { dataUser, newNotify, dataCart } = useStore();
 
     const [dataNotify, setDataNotify] = useState([]);
-
+    const [lengthCart, setLengthCart] = useState(0);
     const { mode, toggleTheme } = useTheme();
+
+    useEffect(() => {
+        const length = dataCart?.data?.reduce((total, item) => total + item.quantityUserBuy, 0);
+        setLengthCart(length || 0);
+    }, [dataCart]);
 
     const navigate = useNavigate();
 
@@ -102,13 +107,19 @@ function Header() {
 
                 {dataUser._id ? (
                     <div className={cx('user')}>
-                        <Link to={'/cart'}>
-                            <Tooltip title="Giỏ hàng">
-                                <button className={cx(mode === 'dark' ? 'cart__dark' : 'cart')}>
-                                    <FontAwesomeIcon icon={faCartPlus} />
-                                </button>
-                            </Tooltip>
-                        </Link>
+                        <div className={cx(mode === 'dark' ? 'cart__dark' : 'cart')}>
+                            <div className={cx(mode === 'dark' ? 'number__notify__dark' : 'number__notify')}>
+                                {lengthCart}
+                            </div>
+                            <Link to={'/cart'}>
+                                <Tooltip title="Giỏ hàng">
+                                    <button>
+                                        <FontAwesomeIcon icon={faCartPlus} />
+                                    </button>
+                                </Tooltip>
+                            </Link>
+                        </div>
+
                         <div className={cx('notify')}>
                             <div className={cx(mode === 'dark' ? 'number__notify__dark' : 'number__notify')}>
                                 {dataNotify.filter((notify) => !notify.isRead).length}

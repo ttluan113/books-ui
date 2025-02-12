@@ -55,13 +55,6 @@ function Payments() {
         fetchData();
     }, [dataUser]);
 
-    const defaultPrice = useMemo(
-        () => dataCarts.reduce((total, item) => total + item.price * item.quantityUserBuy, 0),
-        [dataCarts],
-    );
-
-    const totalDiscount = useMemo(() => totalCart - defaultPrice, [totalCart, defaultPrice]);
-
     useEffect(() => {
         const fetchData = async () => {
             const res = await requestSearchAddress(valueSearch);
@@ -280,11 +273,6 @@ function Payments() {
                             <div className={cx(mode === 'dark' ? 'right__product__dark' : 'right__product')}>
                                 <h5>Phí vận chuyển</h5>
                                 <span>Miễn phí</span>
-                            </div>
-
-                            <div className={cx(mode === 'dark' ? 'right__product__dark' : 'right__product')}>
-                                <h5>Giảm giá </h5>
-                                <span>{totalDiscount.toLocaleString()} đ</span>
                             </div>
                         </div>
                     </div>
