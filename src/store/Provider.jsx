@@ -1,4 +1,4 @@
-import { requestAuth, requestGetCarts } from '../config/config';
+import { requestAuth, requestGetCarts, requestGetNotify } from '../config/config';
 import Context from './Context';
 import CryptoJS from 'crypto-js';
 import { io } from 'socket.io-client';
@@ -14,6 +14,8 @@ export function Provider({ children }) {
     const [newNotify, setNewNotify] = useState({});
     const [newMessage, setNewMessage] = useState({});
     const [newUserMessage, setNewUserMessage] = useState({});
+
+    const [dataNotify, setDataNotify] = useState([]);
 
     const [dataCart, setDataCartCart] = useState([]);
 
@@ -40,14 +42,26 @@ export function Provider({ children }) {
         return;
     }, []);
 
+    useEffect(() => {
+        if (dataNotify.includes(newNotify)) return;
+        setDataNotify([...dataNotify, newNotify]);
+    }, [newNotify]);
+
     const fetchDataCart = async () => {
         const res = await requestGetCarts();
         setDataCartCart(res || []);
     };
 
+    const fetchDataNofity = async () => {
+        const res = await requestGetNotify();
+        setDataNotify(res || []);
+    };
+
     useEffect(() => {
+        if (!dataUser._id) return;
         fetchDataCart();
-    }, []);
+        fetchDataNofity();
+    }, [dataUser]);
 
     useEffect(() => {
         const socket = io('https://book.local2', { transports: ['websocket'] });
@@ -75,7 +89,18 @@ export function Provider({ children }) {
 
     return (
         <Context.Provider
-            value={{ dataUser, socket, newNotify, newMessage, newUserMessage, dataCart, getCart: fetchDataCart }}
+            value={{
+                dataUser,
+                socket,
+                newNotify,
+                newMessage,
+                newUserMessage,
+                dataCart,
+                getCart: fetchDataCart,
+                dataNotify,
+                setDataNotify,
+                getNotify: fetchDataNofity,
+            }}
         >
             {children}
         </Context.Provider>

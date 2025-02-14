@@ -20,19 +20,18 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useEffect, useState } from 'react';
 import { requestGetNotify, requestLogout, requestReadAllNotify } from '../../config/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faMoon, faSun } from '@fortawesome/free-regular-svg-icons';
+import { faMoon, faSun } from '@fortawesome/free-regular-svg-icons';
 
 import { useTheme } from '../../store/Provider';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 
-import TimeAgo from '../../utils/TimeAgo';
+import Notify from './Components/Notify/Notify';
 
 const cx = classNames.bind(styles);
 
 function Header() {
-    const { dataUser, newNotify, dataCart } = useStore();
+    const { dataUser, dataCart } = useStore();
 
-    const [dataNotify, setDataNotify] = useState([]);
     const [lengthCart, setLengthCart] = useState(0);
     const { mode, toggleTheme } = useTheme();
 
@@ -58,37 +57,6 @@ function Header() {
             window.location.reload();
         }, 1000);
     };
-
-    const onNavigateProduct = (path) => {
-        navigate(path);
-    };
-
-    const fetchData = async () => {
-        const res = await requestGetNotify();
-        setDataNotify(res || []);
-    };
-
-    useEffect(() => {
-        if (dataUser.id) {
-            fetchData();
-        }
-    }, [dataUser.id]);
-
-    useEffect(() => {
-        if (!dataNotify.includes(newNotify)) return;
-        setDataNotify([...dataNotify, newNotify]);
-    }, [newNotify]);
-
-    const handleReadAllNotify = async () => {
-        try {
-            await requestReadAllNotify();
-            fetchData();
-        } catch (error) {
-            toast.error(error.response.data.message);
-        }
-    };
-
-    const [showNotify, setShowNotify] = useState(false);
 
     return (
         <div className={cx(mode === 'dark' ? 'wrapper__dark' : 'wrapper')}>
@@ -120,55 +88,10 @@ function Header() {
                             </Link>
                         </div>
 
-                        <div className={cx('notify')}>
-                            <div className={cx(mode === 'dark' ? 'number__notify__dark' : 'number__notify')}>
-                                {dataNotify.filter((notify) => !notify.isRead).length}
-                            </div>
-                            <button onClick={() => setShowNotify(!showNotify)}>
-                                <Tooltip title={!showNotify && 'Thông báo'}>
-                                    <FontAwesomeIcon
-                                        id={cx(mode === 'dark' ? 'icon__notify__dark' : 'icon__notify')}
-                                        icon={faBell}
-                                    />
-                                </Tooltip>
-                            </button>
-
-                            {showNotify && (
-                                <div className={cx(mode === 'dark' ? 'result__notify__dark' : 'result__notify')}>
-                                    <div className={cx('result__notify__header')}>
-                                        <h3>Thông Báo</h3>
-                                        <span onClick={handleReadAllNotify}>Đánh dấu tất cả đã đọc</span>
-                                    </div>
-                                    <div>
-                                        <ul>
-                                            {dataNotify
-                                                .sort((a, b) => b.createdAt - a.createdAt)
-                                                .map((notify) => (
-                                                    <li
-                                                        key={notify._id}
-                                                        onClick={() =>
-                                                            onNavigateProduct(`/product/${notify.productId}`)
-                                                        }
-                                                        id={cx(notify.isRead ? '' : 'no__read')}
-                                                    >
-                                                        <img
-                                                            src="http://localhost:5001/uploads/avatars/1737826973701.webp"
-                                                            alt=""
-                                                        />
-                                                        <div className={cx('result__notify__info')}>
-                                                            <h4>{notify.fullName}</h4>
-                                                            <p>{notify.content}</p>
-                                                            <span>
-                                                                <TimeAgo timestamp={notify.createdAt} />
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            )}
+                        <div>
+                            <Notify />
                         </div>
+
                         <Box>
                             <Tooltip title="Cài đặt tài khoản">
                                 <IconButton
