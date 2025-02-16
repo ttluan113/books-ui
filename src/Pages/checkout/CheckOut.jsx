@@ -9,6 +9,8 @@ import { requestCheckout } from '../../config/config';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '../../store/Provider';
 
+import SlideBarMobile from '../../Components/HomePage/Components/SlideBarMobile/SlideBarMobile';
+
 const cx = classNames.bind(styles);
 
 function CheckOut() {
@@ -53,7 +55,7 @@ function CheckOut() {
 
                     <div className={cx('list')}>
                         <span>Số điện thoại</span>
-                        <p>{dataCheckout.phone}</p>
+                        <p>0{dataCheckout.phone}</p>
                     </div>
 
                     <div className={cx('list')}>
@@ -82,6 +84,9 @@ function CheckOut() {
                     </div>
                 </div>
             </main>
+            <div>
+                <SlideBarMobile />
+            </div>
         </div>
     );
 }

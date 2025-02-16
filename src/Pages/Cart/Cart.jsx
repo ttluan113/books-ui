@@ -19,6 +19,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useStore } from '../../hooks/useStore';
 import { Link } from 'react-router-dom';
 
+import SlideBarMobile from '../../Components/HomePage/Components/SlideBarMobile/SlideBarMobile';
+
 const cx = className.bind(styles);
 
 function Cart() {
@@ -203,6 +205,10 @@ function Cart() {
                             </div>
                         </div>
                     )}
+                </div>
+
+                <div>
+                    <SlideBarMobile />
                 </div>
             </main>
         </div>

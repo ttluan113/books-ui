@@ -11,6 +11,8 @@ import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { useStore } from '../../../../hooks/useStore';
 import { requestReadAllNotify } from '../../../../config/config';
 
+import { useTheme } from '../../../../store/Provider';
+
 import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
@@ -18,7 +20,9 @@ const cx = classNames.bind(styles);
 function Notify() {
     const [showNotify, setShowNotify] = useState(false);
 
-    const { dataNotify, mode, getNotify } = useStore();
+    const { dataNotify, getNotify } = useStore();
+
+    const { mode } = useTheme();
 
     const navigate = useNavigate();
 
@@ -76,7 +80,7 @@ function Notify() {
                                                 <h4>{notify.fullName}</h4>
                                                 <p>{notify.content}</p>
                                                 <span>
-                                                    <TimeAgo timestamp={notify.createdAt} />
+                                                    <TimeAgo createdAt={notify.createdAt} />
                                                 </span>
                                             </div>
                                         </li>

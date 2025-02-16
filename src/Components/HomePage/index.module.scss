@@ -19,9 +19,39 @@
     scrollbar-width: none;
 }
 
-.loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+@media screen and (min-width: 360px) and (max-width: 479px) {
+    .side__bar {
+        display: none;
+    }
+    .wrapper {
+        grid-template-columns: 100%;
+        margin-top: 60px;
+        gap: 0;
+        margin-bottom: 50px;
+    }
+}
+
+/* Điện thoại lớn (480px - 599px) */
+@media screen and (min-width: 480px) and (max-width: 599px) {
+}
+
+/* Phablet (600px - 767px) */
+@media screen and (min-width: 600px) and (max-width: 767px) {
+}
+
+/* Tablet nhỏ (768px - 899px) */
+@media screen and (min-width: 768px) and (max-width: 899px) {
+}
+
+/* Tablet lớn (900px - 1024px) */
+@media screen and (min-width: 900px) and (max-width: 1024px) {
+    .slide__bar__mobile {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    .slide__bar__mobile {
+        display: none;
+    }
 }

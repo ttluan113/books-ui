@@ -6,13 +6,7 @@ import { Box } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-    requestAddCart,
-    requestGetCarts,
-    requestGetHeartProduct,
-    requestGetProduct,
-    requestHeartProduct,
-} from '../../config/config';
+import { requestAddCart, requestGetHeartProduct, requestGetProduct, requestHeartProduct } from '../../config/config';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../store/Provider';
 import Slider from 'react-slick';
@@ -23,6 +17,7 @@ import Messenger from './Components/Messenger/Messenger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import { useStore } from '../../hooks/useStore';
+import SlideBarMobile from '../../Components/HomePage/Components/SlideBarMobile/SlideBarMobile';
 
 const cx = classNames.bind(styles);
 
@@ -145,25 +140,27 @@ function DetailProduct() {
             <main className={cx('main')}>
                 <div className={cx('inner-main')}>
                     <div className={cx(mode === 'dark' ? 'left__dark' : 'left')}>
-                        {product?.images?.length > 1 ? (
-                            <Slider {...settings}>
-                                {product.images.map((image, index) => (
-                                    <div key={index}>
-                                        <img
-                                            src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${image}`}
-                                            alt="123"
-                                        />
-                                    </div>
-                                ))}
-                            </Slider>
-                        ) : (
-                            <div>
-                                <img
-                                    src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${product?.images}`}
-                                    alt=""
-                                />
-                            </div>
-                        )}
+                        <div className={cx('slider-container')}>
+                            {product?.images?.length > 1 ? (
+                                <Slider {...settings}>
+                                    {product.images.map((image, index) => (
+                                        <div key={index}>
+                                            <img
+                                                src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${image}`}
+                                                alt="123"
+                                            />
+                                        </div>
+                                    ))}
+                                </Slider>
+                            ) : (
+                                <div>
+                                    <img
+                                        src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${product?.images}`}
+                                        alt=""
+                                    />
+                                </div>
+                            )}
+                        </div>
 
                         <div className={cx(mode === 'dark' ? 'product-related__dark' : 'product-related')}>
                             <h4>Sản phẩm liên quan</h4>
@@ -312,6 +309,10 @@ function DetailProduct() {
                     <FontAwesomeIcon id={cx('icons')} icon={faMessage} />
                     <span>Chat</span>
                 </div>
+            </div>
+
+            <div>
+                <SlideBarMobile />
             </div>
         </div>
     );

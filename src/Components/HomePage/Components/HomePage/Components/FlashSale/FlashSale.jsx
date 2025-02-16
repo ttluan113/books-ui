@@ -18,8 +18,9 @@ const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 5,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+    arrows: false,
 };
 
 function FlashSale() {

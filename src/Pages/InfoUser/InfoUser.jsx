@@ -17,6 +17,8 @@ import Address from './Components/Address/Address';
 import { useStore } from '../../hooks/useStore';
 import Favorite from './Components/Favorite/Favorite';
 
+import SlideBarMobile from '../../Components/HomePage/Components/SlideBarMobile/SlideBarMobile';
+
 const cx = classNames.bind(styles);
 
 const listController = [
@@ -107,6 +109,9 @@ function InfoUser() {
                     )}
                 </div>
             </main>
+            <div>
+                <SlideBarMobile />
+            </div>
         </div>
     );
 }

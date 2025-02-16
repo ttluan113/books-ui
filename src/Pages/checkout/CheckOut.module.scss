@@ -68,3 +68,36 @@
         }
     }
 }
+
+@media screen and (min-width: 350px) and (max-width: 481px) {
+    .main__dark {
+        width: 95%;
+        margin-top: 70px;
+    }
+    .list__products {
+        li {
+            grid-template-columns: 200px 50px 120px;
+        }
+    }
+    .success {
+        img {
+            width: 40%;
+        }
+    }
+}
+
+/* Điện thoại lớn (480px - 599px) */
+@media screen and (min-width: 480px) and (max-width: 599px) {
+}
+
+/* Phablet (600px - 767px) */
+@media screen and (min-width: 600px) and (max-width: 767px) {
+}
+
+/* Tablet nhỏ (768px - 899px) */
+@media screen and (min-width: 768px) and (max-width: 899px) {
+}
+
+/* Tablet lớn (900px - 1024px) */
+@media screen and (min-width: 900px) and (max-width: 1024px) {
+}

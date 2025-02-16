@@ -16,6 +16,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
+import SlideBarMobile from '../../Components/HomePage/Components/SlideBarMobile/SlideBarMobile';
 
 const cx = classNames.bind(styles);
 
@@ -290,6 +291,9 @@ function Payments() {
                     </div>
                 </div>
             </main>
+            <div>
+                <SlideBarMobile />
+            </div>
         </div>
     );
 }

@@ -176,6 +176,20 @@
     .logo {
         display: none;
     }
+    .wrapper__dark {
+        position: fixed;
+        top: 0;
+        z-index: 999;
+        right: 0;
+        left: 0;
+    }
+    .wrapper {
+        position: fixed;
+        top: 0;
+        z-index: 999;
+        right: 0;
+        left: 0;
+    }
 }
 
 /* Điện thoại lớn (480px - 599px) */
