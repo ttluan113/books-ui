@@ -12,3 +12,28 @@
     padding: 10px;
     min-height: 100vh;
 }
+
+@media screen and (min-width: 350px) and (max-width: 481px) {
+    .wrapper {
+        grid-template-columns: 20% 80%;
+    }
+}
+
+/* Điện thoại lớn (480px - 599px) */
+@media screen and (min-width: 480px) and (max-width: 599px) {
+}
+
+/* Phablet (600px - 767px) */
+@media screen and (min-width: 600px) and (max-width: 767px) {
+}
+
+/* Tablet nhỏ (768px - 899px) */
+@media screen and (min-width: 768px) and (max-width: 899px) {
+    .wrapper {
+        grid-template-columns: 25% 74%;
+    }
+}
+
+/* Tablet lớn (900px - 1024px) */
+@media screen and (min-width: 900px) and (max-width: 1024px) {
+}

@@ -6,6 +6,15 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [react()],
+    // server: {
+    //     https: {
+    //         key: fs.readFileSync(path.resolve(__dirname, './ssl/l2book.site.key')),
+    //         cert: fs.readFileSync(path.resolve(__dirname, './ssl/l2book.site.pem')),
+    //     },
+    //     host: 'l2book.site', // Thay thế bằng domain bạn muốn
+    //     port: 3001, // Hoặc cổng bạn cần
+    // },
+
     server: {
         https: {
             key: fs.readFileSync(path.resolve(__dirname, '/Users/l2team/Desktop/ssl/book.local2-key.pem')),

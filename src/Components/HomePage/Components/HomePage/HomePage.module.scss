@@ -16,26 +16,13 @@
 
 .main__banner {
     width: 100%;
-    height: 50vh;
+    height: 60vh;
     border-radius: 10px;
     position: relative;
     .main__banner__content {
         width: 100%;
         height: 100%;
     }
-    .main__banner__title {
-        position: absolute;
-        background: none !important;
-        top: 5%;
-        left: 1%;
-    }
-}
-
-.main__banner {
-    width: 100%;
-    height: 50vh;
-    border-radius: 10px;
-    position: relative;
     .main__banner__content__dark {
         width: 100%;
         height: 100%;
@@ -49,12 +36,15 @@
     }
 }
 
+
+
 .main__banner__content__info {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
-    height: 50vh;
+    height: 100%;
     align-items: center;
     justify-items: center;
+    height: 60vh;
     ul {
         display: flex;
         flex-direction: column;
@@ -78,7 +68,7 @@
 
     img {
         width: 60%;
-        height: 400px;
+        height: 350px;
         border-radius: 10px;
         opacity: 0;
         object-fit: cover;
@@ -253,11 +243,12 @@
 
 /* Tablet nhỏ (768px - 899px) */
 @media screen and (min-width: 768px) and (max-width: 899px) {
-}
-
-/* Tablet lớn (900px - 1024px) */
-@media screen and (min-width: 900px) and (max-width: 1024px) {
-}
-
-@media screen and (min-width: 1025px) {
+    .main__banner__content__info {
+        img {
+            width: 90%;
+        }
+    }
+    .main__banner {
+        height: auto;
+    }
 }

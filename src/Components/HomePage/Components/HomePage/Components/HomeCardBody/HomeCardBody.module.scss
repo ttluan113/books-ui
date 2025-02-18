@@ -38,6 +38,12 @@
 
 /* Tablet nhỏ (768px - 899px) */
 @media screen and (min-width: 768px) and (max-width: 899px) {
+    .wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        width: 100%;
+    }
 }
 
 /* Tablet lớn (900px - 1024px) */

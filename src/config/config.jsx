@@ -122,6 +122,12 @@ export const requestGetProductSale = async () => {
     return res.data;
 };
 
+export const requestSearchProduct = async (name) => {
+    const params = Object.fromEntries(Object.entries({ name }).filter(([_, v]) => v));
+    const res = await request.get('/api/search-product', { params });
+    return res.data;
+};
+
 //// category
 
 export const requestAddCategory = async (data) => {

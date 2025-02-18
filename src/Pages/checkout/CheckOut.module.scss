@@ -96,6 +96,20 @@
 
 /* Tablet nhỏ (768px - 899px) */
 @media screen and (min-width: 768px) and (max-width: 899px) {
+    .main__dark {
+        width: 95%;
+        margin-top: 70px;
+    }
+    .list__products {
+        li {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    .success {
+        img {
+            width: 40%;
+        }
+    }
 }
 
 /* Tablet lớn (900px - 1024px) */

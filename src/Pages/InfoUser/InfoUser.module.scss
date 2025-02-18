@@ -1,5 +1,5 @@
 .main {
-    width: 70%;
+    width: 80%;
     margin: 20px auto;
     display: grid;
     grid-template-columns: 20% 79%;
@@ -116,8 +116,15 @@
 
 /* Tablet nhỏ (768px - 899px) */
 @media screen and (min-width: 768px) and (max-width: 899px) {
+    .main {
+        width: 95%;
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Tablet lớn (900px - 1024px) */
-@media screen and (min-width: 900px) and (max-width: 1024px) {
+@media screen and (min-width: 1024px) {
+    .slide-bar__mobile {
+        display: none;
+    }
 }

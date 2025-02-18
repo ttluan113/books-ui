@@ -48,10 +48,9 @@ function HomePage({ dataProducts, pageProduct }) {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 5000,
+        autoplaySpeed: 7000,
         beforeChange: (oldIndex, newIndex) => setIndexProduct(newIndex),
     };
-
     const [sortType, setSortType] = useState('');
 
     useEffect(() => {
@@ -72,27 +71,30 @@ function HomePage({ dataProducts, pageProduct }) {
     };
 
     useEffect(() => {
+        if (!products || products.length === 0 || indexProduct < 0 || indexProduct >= products.length) return;
+
         const fac = new FastAverageColor();
         const img = new Image();
 
-        const image = products.map((product, index) => {
-            if (index === indexProduct) {
-                return `https://book.local2/uploads/products/${product?.images[0]}`;
-            }
-        });
+        const product = products[indexProduct];
+        const imageUrl = product?.images?.[0] ? `https://book.local2/uploads/products/${product.images[0]}` : null;
 
-        const filteredImages = image.filter((url) => typeof url === 'string' && url.startsWith('https://'));
+        if (!imageUrl) return;
 
-        img.src = filteredImages[0];
+        img.src = imageUrl;
         img.crossOrigin = 'anonymous';
 
         img.onload = () => {
-            const color = fac.getColor(img) || { hex: '#000' };
+            const color = fac.getColor(img);
             if (bannerRef.current) {
-                bannerRef.current.style.background = `linear-gradient(-90deg, ${color.hex}, rgba(0, 0, 0, 0.05))`;
+                bannerRef.current.style.background = `linear-gradient(-90deg, ${color?.hex || '#ccc'}, rgba(0, 0, 0, 0.05))`;
             }
         };
-    }, [indexProduct, bannerRef]);
+
+        img.onerror = () => {
+            console.error(`Failed to load image: ${imageUrl}`);
+        };
+    }, [indexProduct, products]);
 
     return (
         <div className={cx('wrapper')}>

@@ -97,16 +97,20 @@ function Dashboard() {
                             <p>Người dùng mới</p>
                             <p>+{dataStatiscal.percentUser}% so với ngày hôm qua</p>
                         </div>
-                    </div>
-                    <div className={cx('header__admin__row2')}>
-                        <div className={cx('header__admin__row2__avatar')}>
-                            <img src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${dataUser.avatar}`} alt="" />
-                            <FontAwesomeIcon id={cx('icon')} icon={faCrown} />
+
+                        <div className={cx('header__admin__row2')}>
+                            <div className={cx('header__admin__row2__avatar')}>
+                                <img
+                                    src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${dataUser.avatar}`}
+                                    alt=""
+                                />
+                                <FontAwesomeIcon id={cx('icon')} icon={faCrown} />
+                            </div>
+                            <h4>{dataUser.fullName}</h4>
+                            <p>{dataUser.email}</p>
+                            <span>0{dataUser.phone}</span>
+                            <p>Chức vụ : Quản Trị Website</p>
                         </div>
-                        <h4>{dataUser.fullName}</h4>
-                        <p>{dataUser.email}</p>
-                        <span>0{dataUser.phone}</span>
-                        <p>Chức vụ : Quản Trị Website</p>
                     </div>
                 </div>
             </div>

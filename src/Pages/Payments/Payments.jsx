@@ -291,7 +291,7 @@ function Payments() {
                     </div>
                 </div>
             </main>
-            <div>
+            <div className={cx('slideBarMobile')}>
                 <SlideBarMobile />
             </div>
         </div>

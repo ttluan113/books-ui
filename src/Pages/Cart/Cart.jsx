@@ -207,7 +207,7 @@ function Cart() {
                     )}
                 </div>
 
-                <div>
+                <div className={cx('slide-bar-mobile')}>
                     <SlideBarMobile />
                 </div>
             </main>

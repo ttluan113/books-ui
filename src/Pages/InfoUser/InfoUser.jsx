@@ -109,7 +109,7 @@ function InfoUser() {
                     )}
                 </div>
             </main>
-            <div>
+            <div className={cx('slide-bar__mobile')}>
                 <SlideBarMobile />
             </div>
         </div>

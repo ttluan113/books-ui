@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import logo from '../../../public/images/logo.webp';
-import { Link, useNavigate } from 'react-router-dom';
+import { data, Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../hooks/useStore';
 
 import Box from '@mui/material/Box';
@@ -18,7 +18,7 @@ import Logout from '@mui/icons-material/Logout';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import { useEffect, useState } from 'react';
-import { requestGetNotify, requestLogout, requestReadAllNotify } from '../../config/config';
+import { requestLogout, requestSearchProduct } from '../../config/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-regular-svg-icons';
 
@@ -26,6 +26,7 @@ import { useTheme } from '../../store/Provider';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 
 import Notify from './Components/Notify/Notify';
+import useDebound from '../../hooks/useDebounce';
 
 const cx = classNames.bind(styles);
 
@@ -34,6 +35,23 @@ function Header() {
 
     const [lengthCart, setLengthCart] = useState(0);
     const { mode, toggleTheme } = useTheme();
+
+    const [dataSearch, setDataSearch] = useState([]);
+
+    const [valueSearch, setValueSearch] = useState('');
+
+    const textSearch = useDebound(valueSearch, 500);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await requestSearchProduct(textSearch);
+            setDataSearch(res);
+        };
+        if (textSearch) {
+            fetchData();
+        }
+        return;
+    }, [textSearch]);
 
     useEffect(() => {
         const length = dataCart?.data?.reduce((total, item) => total + item.quantityUserBuy, 0);
@@ -70,7 +88,36 @@ function Header() {
                     </Tooltip>
                 </Link>
                 <div className={cx('search')}>
-                    <input type="text" placeholder="Tìm kiếm" />
+                    <input
+                        onChange={(e) => setValueSearch(e.target.value)}
+                        type="text"
+                        placeholder="Tìm kiếm"
+                        value={valueSearch}
+                    />
+                    {dataSearch.length > 0 && valueSearch && (
+                        <div className={cx('result__search')}>
+                            {dataSearch.map((item) => (
+                                <div
+                                    key={item._id}
+                                    onClick={() => navigate(`/product/${item._id}`)}
+                                    className={cx('result__search__item')}
+                                >
+                                    <img
+                                        src={`${import.meta.env.VITE_URL_IMAGE}/uploads/products/${
+                                            item?.images?.[0] ?? 'default.jpg'
+                                        }`}
+                                        alt={item.name}
+                                    />
+                                    <div className={cx('content')}>
+                                        <h4>{item.name}</h4>
+                                        <span>{item.price.toLocaleString()} đ</span>
+                                        <p>Số lượng còn: {item.quantity}</p>
+                                        <p id={cx('discount')}>Giảm giá : {item.discount} %</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {dataUser._id ? (

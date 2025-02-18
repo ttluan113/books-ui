@@ -19,18 +19,12 @@
     }
 }
 
-.header__admin__content {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 10px;
-}
-
 .header__admin__row1 {
     background-color: rgb(33, 34, 45);
     width: 100%;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
 }
 
@@ -150,4 +144,29 @@
         font-weight: 600;
         color: rgb(169, 223, 216);
     }
+}
+
+@media screen and (min-width: 350px) and (max-width: 481px) {
+    .header__admin__row1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* Điện thoại lớn (480px - 599px) */
+@media screen and (min-width: 480px) and (max-width: 599px) {
+}
+
+/* Phablet (600px - 767px) */
+@media screen and (min-width: 600px) and (max-width: 767px) {
+}
+
+/* Tablet nhỏ (768px - 899px) */
+@media screen and (min-width: 768px) and (max-width: 899px) {
+    .header__admin__row1 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablet lớn (900px - 1024px) */
+@media screen and (min-width: 900px) and (max-width: 1024px) {
 }

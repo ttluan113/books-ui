@@ -311,7 +311,7 @@ function DetailProduct() {
                 </div>
             </div>
 
-            <div>
+            <div className={cx('slide-bar-mobile')}>
                 <SlideBarMobile />
             </div>
         </div>
