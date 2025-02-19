@@ -22,7 +22,7 @@ function CheckOut() {
     const { id } = useParams();
 
     useEffect(() => {
-        document.title = 'Kết quả thanh toán | L2 Team';
+        document.title = 'Kết quả thanh toán | L2 Book';
     }, []);
 
     useEffect(() => {
@@ -43,7 +43,7 @@ function CheckOut() {
             <main className={cx(mode === 'light' ? 'main' : 'main__dark')}>
                 <div className={cx('success')}>
                     <img src={imgSuccess} alt="..." />
-                    <h3>Cảm ơn bạn đã mua hàng tại L2 Team</h3>
+                    <h3>Cảm ơn bạn đã mua hàng tại L2 Book</h3>
                     <p>
                         Thanh toán thành công, hệ thống gửi xác nhận và biên lai ngay lập tức. Quá trình nhanh gọn,
                         khách hàng hoàn toàn yên tâm.

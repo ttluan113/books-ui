@@ -44,7 +44,7 @@ function Cart() {
     }, []);
 
     useEffect(() => {
-        document.title = 'L2 Team | Giỏ Hàng';
+        document.title = 'L2 Book | Giỏ Hàng';
         fetchData();
     }, [fetchData]);
 
@@ -152,7 +152,7 @@ function Cart() {
                         <div className={cx(mode === 'dark' ? 'cart-empty__dark' : 'cart-empty')}>
                             <img src={cartEmpty} />
                             <h4>Giỏ hàng trống</h4>
-                            <p>Bạn tham khảo thêm các sản phẩm được L2 Team gợi ý bên dưới nhé!</p>
+                            <p>Bạn tham khảo thêm các sản phẩm được L2 Book gợi ý bên dưới nhé!</p>
                         </div>
                     )}
                     {carts.length > 0 && (

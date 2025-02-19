@@ -72,6 +72,7 @@ function Header() {
     const handleLogout = async () => {
         await requestLogout();
         setTimeout(() => {
+            navigate('/');
             window.location.reload();
         }, 1000);
     };
@@ -80,10 +81,10 @@ function Header() {
         <div className={cx(mode === 'dark' ? 'wrapper__dark' : 'wrapper')}>
             <div className={cx('inner')}>
                 <Link to="/">
-                    <Tooltip title="Trang Chủ L2 Team">
+                    <Tooltip title="Trang Chủ L2 Book">
                         <div className={cx('logo')}>
                             <img src={logo} alt="logo" />
-                            <h1>L2 Team</h1>
+                            <h1>L2 Book</h1>
                         </div>
                     </Tooltip>
                 </Link>

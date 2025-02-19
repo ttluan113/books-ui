@@ -21,6 +21,9 @@ function Comments({ productId }) {
     const [idCommentRoot, setIdCommentRoot] = useState('');
     const [idComment, setIdComment] = useState('');
     const [valueInputRoot, setValueInputRoot] = useState('');
+    const [showSubComments, setShowSubComments] = useState(false);
+
+    const [idSubComment, setIdSubComment] = useState('');
 
     const { dataUser } = useStore();
 
@@ -111,58 +114,71 @@ function Comments({ productId }) {
                                 />
                             </div>
                         )}
+                        {comment?.subComments?.length > 0 && (
+                            <button
+                                onClick={() => {
+                                    setShowSubComments(true);
+                                    setIdSubComment(comment._id);
+                                }}
+                            >
+                                Xem tất cả {comment?.subComments?.length} phản hồi
+                            </button>
+                        )}
+                        {showSubComments && idSubComment === comment._id && (
+                            <div className={cx('sub__comments')}>
+                                <div className={cx('form__sub__comments')}>
+                                    {comment?.subComments?.length > 0 &&
+                                        comment?.subComments?.map((subComment) => (
+                                            <div key={subComment._id} className={cx('inner__sub__comment')}>
+                                                <div className={cx('info__user__sub')}>
+                                                    <Avatar
+                                                        sx={{ width: '35px', height: '35px' }}
+                                                        src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${
+                                                            subComment.user.avatar
+                                                        }`}
+                                                    />
+                                                    <h4>{subComment.user.fullName}</h4>
+                                                    {subComment.user.isAdmin === true && (
+                                                        <FontAwesomeIcon id={cx('icon__check')} icon={faCheckCircle} />
+                                                    )}
+                                                </div>
+                                                <p>{subComment.content}</p>
+                                                {(dataUser.isAdmin === true || dataUser._id === comment.userId) && (
+                                                    <button
+                                                        onClick={() => {
+                                                            setShowInput(true);
+                                                            setIdCommentRoot(subComment._id);
+                                                            setIdComment(comment._id);
+                                                            setValueInput('');
+                                                        }}
+                                                    >
+                                                        Phản hồi
+                                                    </button>
+                                                )}
 
-                        <div className={cx('sub__comments')}>
-                            <div className={cx('form__sub__comments')}>
-                                {comment?.subComments?.length > 0 &&
-                                    comment?.subComments?.map((subComment) => (
-                                        <div key={subComment._id} className={cx('inner__sub__comment')}>
-                                            <div className={cx('info__user__sub')}>
-                                                <Avatar
-                                                    sx={{ width: '35px', height: '35px' }}
-                                                    src={`${import.meta.env.VITE_URL_IMAGE}/uploads/avatars/${
-                                                        subComment.user.avatar
-                                                    }`}
-                                                />
-                                                <h4>{subComment.user.fullName}</h4>
-                                                {subComment.user.isAdmin === true && (
-                                                    <FontAwesomeIcon id={cx('icon__check')} icon={faCheckCircle} />
+                                                {showInput && subComment._id === idCommentRoot && (
+                                                    <div
+                                                        className={cx(
+                                                            mode === 'light'
+                                                                ? 'input__comments'
+                                                                : 'input__comments__dark',
+                                                        )}
+                                                    >
+                                                        <input
+                                                            placeholder={`Trả lời bình luận ${subComment.user.fullName}`}
+                                                            onChange={(e) => setValueInput(e.target.value)}
+                                                            onKeyDown={(e) =>
+                                                                e.key === 'Enter' && handleAddComment(subComment.userId)
+                                                            }
+                                                            value={valueInput}
+                                                        />
+                                                    </div>
                                                 )}
                                             </div>
-                                            <p>{subComment.content}</p>
-                                            {(dataUser.isAdmin === true || dataUser._id === comment.userId) && (
-                                                <button
-                                                    onClick={() => {
-                                                        setShowInput(true);
-                                                        setIdCommentRoot(subComment._id);
-                                                        setIdComment(comment._id);
-                                                        setValueInput('');
-                                                    }}
-                                                >
-                                                    Phản hồi
-                                                </button>
-                                            )}
-
-                                            {showInput && subComment._id === idCommentRoot && (
-                                                <div
-                                                    className={cx(
-                                                        mode === 'light' ? 'input__comments' : 'input__comments__dark',
-                                                    )}
-                                                >
-                                                    <input
-                                                        placeholder={`Trả lời bình luận ${subComment.user.fullName}`}
-                                                        onChange={(e) => setValueInput(e.target.value)}
-                                                        onKeyDown={(e) =>
-                                                            e.key === 'Enter' && handleAddComment(subComment.userId)
-                                                        }
-                                                        value={valueInput}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                        ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             ))}

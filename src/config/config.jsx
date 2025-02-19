@@ -1,4 +1,5 @@
 import axios from 'axios';
+const CLIENT_ID_GOOGLE = import.meta.env.CLIENT_ID_GOOGLE;
 
 const request = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -6,6 +7,11 @@ const request = axios.create({
 });
 
 /// user
+
+export const requestVerifyAccount = async (otp) => {
+    const res = await request.post('/api/verify-account', { otp });
+    return res.data;
+};
 
 export const requestRegister = async (data) => {
     const res = await request.post('/api/register', data);
@@ -80,6 +86,13 @@ export const requestForgotPassword = async (email) => {
 
 export const requestResetPassword = async (otp, password) => {
     const res = await request.post('/api/reset-password', { otp, password });
+    return res.data;
+};
+
+export const requestLoginGoogle = async (tokenGoogle) => {
+    const res = await request.post('/api/login-google', {
+        tokenGoogle: tokenGoogle,
+    });
     return res.data;
 };
 

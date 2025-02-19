@@ -37,6 +37,30 @@
         display: none;
     }
 }
+@media screen and (min-width: 480px) and (max-width: 599px) {
+    .side__bar {
+        display: none;
+    }
+    .wrapper {
+        grid-template-columns: 100%;
+        margin-top: 60px;
+        gap: 0;
+        margin-bottom: 50px;
+    }
+}
+
+/* Phablet (600px - 767px) */
+@media screen and (min-width: 600px) and (max-width: 767px) {
+    .side__bar {
+        display: none;
+    }
+    .wrapper {
+        grid-template-columns: 100%;
+        margin-top: 60px;
+        gap: 0;
+        margin-bottom: 50px;
+    }
+}
 
 @media screen and (min-width: 768px) and (max-width: 899px) {
     .side__bar {

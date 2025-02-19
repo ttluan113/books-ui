@@ -62,7 +62,7 @@ function DetailProduct() {
             const totalRating = res.feedbackUser.reduce((total, item) => total + item.rating, 0);
             const averageRating = totalRating / res.feedbackUser.length;
 
-            setRatingProduct(averageRating.toFixed(1));
+            setRatingProduct(averageRating.toFixed(1) || 0);
 
             setIdProduct(id);
 
@@ -196,7 +196,7 @@ function DetailProduct() {
                             <h1>{product?.name}</h1>
                             <Box className={cx('rating')}>
                                 <span>{ratingProduct || 0}</span>
-                                <Rating name="read-only" value={5} readOnly size="small" />
+                                <Rating name="read-only" value={ratingProduct} readOnly size="small" />
                                 <p>({dataFeedback?.length})</p>
                                 <span className={cx('sold')}>| Đã Bán {product?.countBuy}</span>
                             </Box>
@@ -289,7 +289,7 @@ function DetailProduct() {
                                         <Rating name="read-only" value={feedback?.rating} readOnly size="small" />
                                         <p>{feedback?.content}</p>
                                         <span className={cx('time')}>
-                                            <TimeAgo datetime={feedback?.createdAt} locale="vi" />
+                                            <TimeAgo createdAt={feedback?.createdAt} locale="vi" />
                                         </span>
                                     </div>
                                 </div>

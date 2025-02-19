@@ -36,8 +36,6 @@
     }
 }
 
-
-
 .main__banner__content__info {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -68,7 +66,7 @@
 
     img {
         width: 60%;
-        height: 350px;
+        height: 90%;
         border-radius: 10px;
         opacity: 0;
         object-fit: cover;
@@ -230,10 +228,26 @@
     }
 }
 
+@media screen and (min-width: 374px) and (max-width: 598px) {
+    .main__banner {
+        height: 82vh;
+    }
+}
+
 /* Điện thoại lớn (480px - 599px) */
 @media screen and (min-width: 480px) and (max-width: 599px) {
     .main__banner {
         height: fit-content;
+    }
+    .main__banner__content__info {
+        display: flex !important;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 70px;
+        height: fit-content;
+        img {
+            display: none;
+        }
     }
 }
 

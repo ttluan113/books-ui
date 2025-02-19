@@ -1,32 +1,42 @@
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import Header from '../../Components/Header/Header';
-import { useState } from 'react';
-import { TextField, IconButton, InputAdornment, Button, Box, Link, Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { TextField, IconButton, InputAdornment, Button, Box, Divider } from '@mui/material';
 import { Visibility, VisibilityOff, Google } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
+
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 import logo from '../../../public/images/logo.webp';
 
 import { Link as LinkRouter, useNavigate } from 'react-router-dom';
-import { requestLogin } from '../../config/config';
+import { requestLogin, requestLoginGoogle } from '../../config/config';
 import { useTheme } from '../../store/Provider';
+import { useStore } from '../../hooks/useStore';
+import SlideBarMobile from '../../Components/HomePage/Components/SlideBarMobile/SlideBarMobile';
 
 const cx = classNames.bind(styles);
 function LoginUser() {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    const { mode } = useTheme();
+    const clientId = import.meta.env.VITE_CLIENT_ID_GOOGLE;
 
-    const handleGoogleLogin = () => {
-        // Xử lý logic đăng nhập bằng Google ở đây
-        console.log('Đăng nhập bằng Google');
-    };
+    const { mode } = useTheme();
+    const { dataUser } = useStore();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (dataUser._id) {
+            navigate('/');
+        }
+    }, [dataUser]);
+
     const handleLogin = async () => {
         const data = {
             email,
@@ -40,7 +50,24 @@ function LoginUser() {
             }, 1000);
             navigate('/');
         } catch (error) {
-            toast.error(error.response.data.message);
+            if (error.response.data.success === false) {
+                navigate('/verify');
+            }
+            toast.error(error.response.data);
+        }
+    };
+
+    const handleSuccess = async (response) => {
+        const { credential } = response; // Nhận ID Token từ Google
+        try {
+            const res = await requestLoginGoogle(credential);
+            toast.success(res.message);
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+            navigate('/');
+        } catch (error) {
+            console.error('Login failed', error);
         }
     };
 
@@ -53,7 +80,7 @@ function LoginUser() {
                 <div className={cx(mode === 'dark' ? 'inner__dark' : 'inner')}>
                     <div className={cx('logo')}>
                         <img src={logo} alt="" />
-                        <h2>L2 Team</h2>
+                        <h2>L2 Book</h2>
                         <p>
                             Chào mừng bạn đến với cửa hàng sách trực tuyến của chúng tôi! Để tiếp tục mua sắm và tận
                             hưởng các ưu đãi hấp dẫn, vui lòng đăng nhập vào tài khoản của bạn.
@@ -111,29 +138,21 @@ function LoginUser() {
 
                             <Divider sx={{ my: 2 }}>Hoặc</Divider>
 
-                            <Button
-                                variant="outlined"
-                                fullWidth
-                                startIcon={<Google />}
-                                onClick={handleGoogleLogin}
-                                sx={{
-                                    borderColor: '#00796b',
-                                    '&:hover': {
-                                        borderColor: '#004d40',
-                                        backgroundColor: 'rgba(0, 121, 107, 0.04)',
-                                    },
-                                }}
-                            >
-                                Đăng nhập bằng Google
-                            </Button>
                             <LinkRouter to="/register" style={{ textAlign: 'center', color: '#1976d2' }}>
                                 Chưa có tài khoản? Đăng ký ngay
                             </LinkRouter>
+
+                            <GoogleOAuthProvider clientId={clientId}>
+                                <GoogleLogin onSuccess={handleSuccess} onError={() => console.log('Login Failed')} />
+                            </GoogleOAuthProvider>
                         </Box>
                     </div>
                 </div>
             </main>
             <ToastContainer />
+            <div className={cx('slide-bar')}>
+                <SlideBarMobile />
+            </div>
         </div>
     );
 }

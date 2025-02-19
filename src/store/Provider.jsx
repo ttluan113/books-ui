@@ -6,6 +6,8 @@ import { io } from 'socket.io-client';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import cookies from 'js-cookie';
+
 import { useEffect, useState, useMemo, useContext, createContext } from 'react';
 
 export function Provider({ children }) {
@@ -28,7 +30,8 @@ export function Provider({ children }) {
     };
 
     useEffect(() => {
-        const token = document.cookie;
+        const token = cookies.get('logged');
+
         const fetchData = async () => {
             try {
                 await getAuthUser();
@@ -36,9 +39,10 @@ export function Provider({ children }) {
                 console.log(error);
             }
         };
-        if (token === 'logged=1') {
+        if (token === '1') {
             fetchData();
         }
+
         return;
     }, []);
 
@@ -64,7 +68,7 @@ export function Provider({ children }) {
     }, [dataUser]);
 
     useEffect(() => {
-        const socket = io('http://localhost:5001', { transports: ['websocket'] });
+        const socket = io(import.meta.env.VITE_URL_IMAGE, { transports: ['websocket'] });
         socket.on('connection', () => {
             console.log('connected');
             setSocket(socket);

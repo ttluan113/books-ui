@@ -10,6 +10,7 @@ import InfoUser from '../Pages/InfoUser/InfoUser';
 import LoginUser from '../Pages/Login/Login';
 import Payments from '../Pages/Payments/Payments';
 import RegisterUser from '../Pages/Register/Register';
+import VerifyAccount from '../Pages/VerifyAccount/VerifyAccount';
 
 const publicRoutes = [
     {
@@ -88,6 +89,11 @@ const publicRoutes = [
     {
         path: '/forgot-password',
         component: <ForgotPassword />,
+    },
+
+    {
+        path: '/verify',
+        component: <VerifyAccount />,
     },
 
     {

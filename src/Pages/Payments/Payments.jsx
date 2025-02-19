@@ -22,7 +22,7 @@ const cx = classNames.bind(styles);
 
 function Payments() {
     useEffect(() => {
-        document.title = 'L2 Team | Thanh Toán';
+        document.title = 'L2 Book | Thanh Toán';
     }, []);
 
     const { mode } = useTheme();

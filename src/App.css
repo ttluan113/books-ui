@@ -30,6 +30,12 @@ body {
 
 /* Điện thoại lớn (480px - 599px) */
 @media screen and (min-width: 480px) and (max-width: 599px) {
+    .logo {
+        display: none;
+    }
+    .container {
+        width: 100%;
+    }
 }
 
 /* Phablet (600px - 767px) */

@@ -191,3 +191,35 @@ form {
         padding: 20px;
     }
 }
+
+/* Điện thoại trung bình (360px - 479px) */
+@media screen and (min-width: 360px) and (max-width: 599px) {
+    .inner__dark {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        margin-top: 70px;
+    }
+    .inner {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        margin-top: 70px;
+    }
+}
+
+/* Phablet (600px - 767px) */
+@media screen and (min-width: 600px) and (max-width: 767px) {
+    .inner__dark {
+        grid-template-columns: 1fr;
+        max-width: 90%;
+    }
+    .inner {
+        grid-template-columns: 1fr;
+        max-width: 90%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .slide-bar {
+        display: none;
+    }
+}
