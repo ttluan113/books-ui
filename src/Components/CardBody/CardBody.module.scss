@@ -25,6 +25,12 @@
         text-transform: uppercase;
         text-overflow: ellipsis;
         white-space: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Giới hạn hiển thị 4 dòng */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
     }
     h3 {
         font-size: 16px;

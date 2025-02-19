@@ -39,7 +39,6 @@ function Blogs() {
                     <img src={`${import.meta.env.VITE_URL_IMAGE}/uploads/blogs/${blog?.image}`} alt="" />
                     <div className={cx(mode === 'dark' ? 'content__dark' : 'content')}>
                         <h4>{blog.nameBlog}</h4>
-                        <p dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                     </div>
                 </div>
             ))}
