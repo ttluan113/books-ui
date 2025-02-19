@@ -1,5 +1,5 @@
 import axios from 'axios';
-const CLIENT_ID_GOOGLE = import.meta.env.CLIENT_ID_GOOGLE;
+import cookies from 'js-cookie';
 
 const request = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -346,6 +346,10 @@ request.interceptors.response.use(
 
                 try {
                     // Gửi yêu cầu refresh token
+                    const token = cookies.get('logged');
+                    if (!token) {
+                        return;
+                    }
                     await requestRefreshToken();
 
                     // Xử lý lại tất cả các request bị lỗi 401 trước đó
