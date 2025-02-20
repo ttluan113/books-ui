@@ -16,6 +16,10 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import ModalDeleteProduct from './ModalDelete/ModalDelete';
 
+import PaginationPage from '../../../../../Components/Pagination/Pagination';
+
+import { useSearchParams } from 'react-router-dom';
+
 const cx = classNames.bind(styles);
 
 function createData(id, img, name, price, quantity, category, images, options, description) {
@@ -25,8 +29,12 @@ function createData(id, img, name, price, quantity, category, images, options, d
 function HomeProducts() {
     const [dataProducts, setDataProducts] = useState([]);
 
+    const [pageProduct, setPageProduct] = useState(1);
+
     const [open, setOpen] = useState(false);
     const [dataOneProduct, setDataOneProduct] = useState({});
+
+    const [searchParams] = useSearchParams();
 
     const [type, setType] = useState(0);
 
@@ -34,15 +42,18 @@ function HomeProducts() {
         const data = {
             sortType: '',
             category: '',
+            limit: 10,
+            page: searchParams.get('page') || 1,
         };
         const res = await requestGetProducts(data);
         setDataProducts(res.data);
+        setPageProduct(res.totalPages);
     };
 
     useEffect(() => {
         fetchData();
         document.title = 'Quản lý sản phẩm';
-    }, [open, type]);
+    }, [open, type, searchParams]);
 
     const rows = dataProducts.map((product) => {
         return createData(
@@ -151,6 +162,7 @@ function HomeProducts() {
                 )}
             </div>
             <ModalDeleteProduct open={open} setOpen={setOpen} dataOneProduct={dataOneProduct} />
+            <PaginationPage totalPages={pageProduct} />
         </div>
     );
 }
