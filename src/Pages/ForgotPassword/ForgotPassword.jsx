@@ -14,6 +14,8 @@ import { requestForgotPassword, requestResetPassword } from '../../config/config
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
+import cookies from 'js-cookie'
+
 const cx = classNames.bind(styles);
 
 function ForgotPassword() {
@@ -29,14 +31,18 @@ function ForgotPassword() {
         document.title = 'Quên mật khẩu';
     }, []);
 
-    const token = document.cookie.split(';')[0].split('=')[1];
+
+
+    const token = cookies.get('token');
+    
 
     useEffect(() => {
-        if (token) {
-            const data = jwtDecode(token);
-            setEmail(data?.email);
-            setCheckEmail(false);
+        if (!token) {
+           return
         }
+        const data = jwtDecode(token);
+        setEmail(data?.email);
+        setCheckEmail(false);
     }, [token]);
 
     const { mode } = useTheme();

@@ -51,9 +51,9 @@ function LoginUser() {
             navigate('/');
         } catch (error) {
             if (error.response.data.success === false) {
-                navigate('/verify');
+                return navigate('/verify');
             }
-            toast.error(error.response.data);
+            toast.error(error.response.data.message);
         }
     };
 
@@ -73,7 +73,8 @@ function LoginUser() {
 
     return (
         <div className={cx(mode === 'dark' ? 'wrapper__dark' : 'wrapper')}>
-            <header>
+             <ToastContainer />
+            <header> 
                 <Header />
             </header>
             <main className={cx('main')}>
